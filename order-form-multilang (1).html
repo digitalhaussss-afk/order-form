@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedding Website Order Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#3b5bdb; --blue-deep:#2c46b5; --tint:#eef2ff; --tint-line:#c9d4fb;
+  --bg:#f6f8fc; --card:#ffffff; --ink:#1b2540; --muted:#6a7590; --line:#e2e8f3;
+  --tile:#f8faff; --err:#d92d20; --ok:#1f9d63;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.top{background:#fff;border-bottom:1px solid var(--line);padding:18px 20px 22px}
+.top-in{max-width:640px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px;margin:0 0 22px}
+.logo{width:44px;height:44px;border-radius:12px;background:var(--blue);display:grid;place-items:center;flex:none}
+.logo svg{width:24px;height:24px}
+.brand b{font-size:15px;letter-spacing:.01em}
+.top h1{margin:0 0 8px;font:700 clamp(28px,7vw,36px)/1.15 Inter,system-ui,sans-serif;letter-spacing:-.02em;color:var(--ink)}
+.top p{margin:0;color:var(--muted);max-width:48ch}
+main{max-width:640px;margin:0 auto;padding:20px 16px 56px}
+.progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0 10px;margin:0 0 10px}
+.bar{height:6px;background:#dde4f3;border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--blue);border-radius:6px;transition:width .3s}
+.progress p{margin:8px 0 0;font-size:14px;color:var(--muted)}
+.card{background:none;border:0;padding:0}
+.step{margin:0 0 12px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;scroll-margin-top:70px}
+.acc-h{display:flex;align-items:center;gap:12px;margin:0;padding:16px 18px 8px;font:inherit}
+.num{width:36px;height:36px;border-radius:10px;background:var(--tint);color:var(--blue);display:grid;place-items:center;font-weight:700;font-size:15px;flex:none}
+.step.done .num{background:var(--blue);color:#fff}
+.acc-h .t{flex:1;font:600 18px/1.25 Inter,system-ui,sans-serif;color:var(--ink)}
+.acc-h .st{font-size:13px;color:var(--muted);font-weight:500;white-space:nowrap}
+.step.done .st{color:var(--ok)}
+.step.done .st::before{content:"\2713 "}
+.body{padding:6px 18px 20px}
+.body>.lead{margin:0 0 18px;color:var(--muted);font-size:15px}
+.sr{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.f>label.pick{display:inline-block;font-weight:600;margin-bottom:0;border:1px dashed var(--blue);color:var(--blue);border-radius:12px;padding:11px 16px;cursor:pointer;background:var(--tint)}
+.f>label.pick:has(input:focus-visible){outline:2px solid var(--blue);outline-offset:2px}
+.files{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.files li{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 8px;font-size:14px}
+.files img{width:40px;height:40px;object-fit:cover;border-radius:6px;flex:none;background:var(--tile)}
+.files .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.files .sz{color:var(--muted);font-size:12px}
+.files button{border:0;background:none;color:var(--blue);padding:4px 8px;font-size:20px;line-height:1;border-radius:6px}
+.uerr{color:var(--err);font-size:14px;margin:6px 0 0}
+.uerr:empty{display:none}
+.f{margin:0 0 18px;border:0;padding:0;min-width:0}
+.f>label,.f>legend{display:block;font-weight:600;font-size:15px;margin-bottom:6px;padding:0}
+.req::after,.star::after{content:" *";color:var(--blue)}
+.hint{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:2px}
+input[type=text],input[type=email],input[type=tel],input[type=url],input[type=date],input[type=time],input[type=number],textarea,select{
+  width:100%;font:inherit;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+textarea{min-height:92px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;background:var(--tile);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer}
+.opt:has(input:checked){border-color:var(--blue);background:var(--tint);box-shadow:inset 0 0 0 1px var(--blue)}
+.opt:has(input:focus-visible){outline:2px solid var(--blue);outline-offset:2px}
+.opt input{margin-top:4px;accent-color:var(--blue);flex:none}
+.opt small{display:block;color:var(--muted);font-size:13px}
+.sub{margin:0 0 18px;padding:14px;border-left:3px solid var(--blue);background:var(--tint);border-radius:0 12px 12px 0}
+.sub .opt{background:#fff}
+.sub .opt:has(input:checked){background:#fff}
+.sub>.f:last-child,.sub>div:last-child>.f:last-child{margin-bottom:0}
+.block{border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px;background:#fff}
+.block h3{margin:0 0 10px;font:600 17px Inter,system-ui,sans-serif;color:var(--blue)}
+.block .f{margin-bottom:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:420px){.row{grid-template-columns:1fr}}
+.bad{outline:2px solid var(--err);outline-offset:6px;border-radius:6px}
+.msg{color:var(--err);font-size:14px;margin:6px 0 0}
+.nav{display:flex;gap:10px;margin-top:18px}
+button{font:inherit;font-weight:600;border-radius:12px;padding:12px 22px;cursor:pointer;border:1px solid var(--blue)}
+.primary{background:var(--blue);color:#fff;flex:1}
+.primary:hover{background:var(--blue-deep)}
+.ghost{background:#fff;color:var(--blue);border-color:var(--tint-line)}
+.link{background:none;border:0;color:var(--blue);text-decoration:underline;padding:6px 0;font-weight:500}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+button:disabled{opacity:.6;cursor:wait}
+.thanks{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 20px}
+.thanks h2{font:700 28px/1.2 Inter,system-ui,sans-serif;letter-spacing:-.01em;color:var(--ink);margin:0 0 10px}
+.demo{margin-top:16px;padding:12px 14px;background:#fff6dc;border:1px solid #e8cf80;border-radius:12px;font-size:14px}
+.code{margin:18px 0 0;padding:16px;border:1px solid var(--tint-line);background:var(--tint);border-radius:14px;display:grid;gap:4px}
+.code b{font:700 28px/1.2 Inter,system-ui,sans-serif;letter-spacing:.06em;color:var(--blue-deep);user-select:all}
+.code-l{font-size:13px;color:var(--muted);font-weight:500}
+.code-h{font-size:14px;color:var(--muted)}
+.btn-link{display:block;margin-top:14px;text-align:center;text-decoration:none;background:var(--blue);color:#fff;border-radius:12px;padding:12px 22px;font-weight:600}
+.btn-link:hover{background:var(--blue-deep)}
+@media(prefers-reduced-motion:reduce){.bar i{transition:none}}
+.lang{margin-left:auto;display:flex;align-items:center;gap:6px;color:var(--muted)}
+.lang svg{width:18px;height:18px;flex:none}
+.lang select{width:auto;padding:7px 10px;font-size:14px;border-radius:10px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></span><b>Wedding Website</b><div class="lang" data-noi18n><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><select id="lang" aria-label="Language"></select></div></div>
+    <h1>Order Form</h1>
+    <p>Thank you for choosing us! Fill in the details below and we'll get started. Fields marked * are required.</p>
+  </div>
+</header>
+
+<main>
+  <div class="progress" aria-live="polite">
+    <div class="bar"><i id="barFill"></i></div>
+    <p id="stepLabel" data-noi18n></p>
+  </div>
+
+  <div class="card" id="card">
+  <form id="f" novalidate>
+
+    <!-- 1 CONTACT -->
+    <section class="step" data-title="Contact">
+      <h2>Contact</h2>
+      <p class="lead">How can we reach you?</p>
+      <div class="f"><label class="req" for="full_name">Full name</label><input type="text" id="full_name" name="full_name" required autocomplete="name"></div>
+      <div class="f"><label class="req" for="whatsapp">WhatsApp number<span class="hint">Include country code, e.g. +62 812 3456 7890</span></label><input type="tel" id="whatsapp" name="whatsapp" required autocomplete="tel"></div>
+      <div class="f"><label class="req" for="email">Email</label><input type="email" id="email" name="email" required autocomplete="email"></div>
+      <div class="f"><label class="req" for="wedding_date">Wedding date</label><input type="date" id="wedding_date" name="wedding_date" required></div>
+      <div class="f"><label for="source">Where did you find us?</label>
+        <select id="source" name="source"><option value="">Choose one</option><option>Instagram</option><option>TikTok</option><option>Friend</option><option>Other</option></select></div>
+    </section>
+
+    <!-- 2 PACKAGE -->
+    <section class="step" data-title="Package">
+      <h2>Package</h2>
+      <p class="lead">Pick your template and any add-ons.</p>
+      <div class="f"><label class="req" for="template">Template name or code</label><input type="text" id="template" name="template" required></div>
+      <fieldset class="f"><legend>Add-ons</legend>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" name="addons" value="Background music"><span>Background music</span></label>
+          <label class="opt"><input type="checkbox" name="addons" value="Photo gallery"><span>Photo gallery</span></label>
+          <label class="opt"><input type="checkbox" name="addons" value="Extra language"><span>Extra language</span></label>
+          <label class="opt"><input type="checkbox" name="addons" value="Live streaming link"><span>Live streaming link</span></label>
+          <label class="opt"><input type="checkbox" name="addons" value="Rush delivery"><span>Rush delivery</span></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <!-- 3 COUPLE -->
+    <section class="step" data-title="Couple details">
+      <h2>Couple details</h2>
+      <p class="lead">Names exactly as you want them to appear.</p>
+      <div class="row">
+        <div class="f"><label class="req" for="bride_full">Bride's full name</label><input type="text" id="bride_full" name="bride_full" required></div>
+        <div class="f"><label class="req" for="bride_short">Bride's short name</label><input type="text" id="bride_short" name="bride_short" required></div>
+      </div>
+      <div class="row">
+        <div class="f"><label class="req" for="groom_full">Groom's full name</label><input type="text" id="groom_full" name="groom_full" required></div>
+        <div class="f"><label class="req" for="groom_short">Groom's short name</label><input type="text" id="groom_short" name="groom_short" required></div>
+      </div>
+      <fieldset class="f"><legend class="req">Name order on the invitation</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="name_order" value="Bride first" required><span>Bride first</span></label>
+          <label class="opt"><input type="radio" name="name_order" value="Groom first"><span>Groom first</span></label>
+        </div>
+      </fieldset>
+      <div class="f"><label for="monogram">Monogram initials<span class="hint">e.g. A &amp; C</span></label><input type="text" id="monogram" name="monogram"></div>
+      <div class="f"><label for="parents">Parents' names (optional)</label><textarea id="parents" name="parents"></textarea></div>
+      <div class="f"><label class="req" for="contact_email_site">Contact email shown on the website</label><input type="email" id="contact_email_site" name="contact_email_site" required></div>
+    </section>
+
+    <!-- 4 EVENTS -->
+    <section class="step" data-title="Events and venue">
+      <h2>Events and venue</h2>
+      <p class="lead">Choose your events, then fill in the details for each.</p>
+      <fieldset class="f" data-need id="eventsGroup"><legend class="req">Which events will be included?</legend>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" name="events" value="Ceremony"><span>Ceremony</span></label>
+          <label class="opt"><input type="checkbox" name="events" value="Reception"><span>Reception</span></label>
+          <label class="opt"><input type="checkbox" name="events" value="Welcome dinner"><span>Welcome dinner</span></label>
+          <label class="opt"><input type="checkbox" name="events" value="Other"><span>Other</span></label>
+        </div>
+      </fieldset>
+      <div id="eventBlocks"></div>
+      <div class="f"><label for="dress_code">Dress code</label><input type="text" id="dress_code" name="dress_code"></div>
+      <div class="f"><label for="gift_info">Gift or registry info (optional)</label><textarea id="gift_info" name="gift_info"></textarea></div>
+    </section>
+
+    <!-- 5 STORY -->
+    <section class="step" data-title="Our Love Story">
+      <h2>Our Love Story</h2>
+      <p class="lead">The story page on your website.</p>
+      <fieldset class="f" data-need><legend class="req">Who writes the story?</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="story_mode" value="Couple writes" required><span>I'll write it</span></label>
+          <label class="opt"><input type="radio" name="story_mode" value="Please write it"><span>Please help me write it</span></label>
+        </div>
+      </fieldset>
+      <div class="f" data-when="story_mode=Couple writes"><label class="req" for="story_text">Paste your story</label><textarea id="story_text" name="story_text" required style="min-height:160px"></textarea></div>
+      <div class="f" data-when="story_mode=Please write it"><label class="req" for="story_notes">How did you meet, when did you get engaged, any special moment?</label><textarea id="story_notes" name="story_notes" required style="min-height:160px"></textarea></div>
+    </section>
+
+    <!-- 6 RSVP -->
+    <section class="step" data-title="RSVP setup">
+      <h2>RSVP setup</h2>
+      <p class="lead">What your guests will be asked when they reply.</p>
+      <div class="f"><label class="req" for="rsvp_deadline">RSVP deadline</label><input type="date" id="rsvp_deadline" name="rsvp_deadline" required></div>
+      <fieldset class="f"><legend>Which events can guests RSVP to?</legend>
+        <div class="opts" id="rsvpEvents"><p class="hint">Choose your events in the Events section first.</p></div>
+      </fieldset>
+      <fieldset class="f" data-need><legend class="req">Meal service</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="meal_service" value="Buffet" required><span>Buffet<small>Guests only list dietary requirements.</small></span></label>
+          <label class="opt"><input type="radio" name="meal_service" value="Set menu"><span>Set menu<small>Each guest picks a main course.</small></span></label>
+        </div>
+      </fieldset>
+      <div class="sub" data-when="meal_service=Set menu">
+        <div class="f"><label class="req" for="menu_options">Set menu options<span class="hint">One per line, e.g. Beef, Chicken, Fish, Vegetarian. Each guest chooses their own.</span></label><textarea id="menu_options" name="menu_options" required></textarea></div>
+        <div class="f upload" data-up="menu_photos" data-max="6"  ><label class="" for="up_menu_photos">Menu photos (optional)<span class="hint">A photo of each dish or your menu card. Up to 6 photos.</span></label><label class="pick"><input type="file" id="up_menu_photos" class="sr" accept="image/*" multiple><span>Choose files</span></label><ul class="files" data-noi18n></ul><p class="uerr" role="alert"></p></div>
+      </div>
+      <fieldset class="f" data-need><legend class="req">Can guests bring additional guests?</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="plus_ones" value="Yes" required><span>Yes</span></label>
+          <label class="opt"><input type="radio" name="plus_ones" value="No"><span>No, the invitation is for the named guest only</span></label>
+        </div>
+      </fieldset>
+      <div class="sub" data-when="plus_ones=Yes">
+        <div class="f"><label class="req" for="max_guests">Maximum additional guests per invitation<span class="hint">Not counting the invited guest. e.g. 1 for a plus-one.</span></label><input type="number" id="max_guests" name="max_guests" min="1" step="1" inputmode="numeric" placeholder="1" required></div>
+        <fieldset class="f" data-need><legend class="req">Should guests list the names of additional guests?</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="guest_names" value="Yes" required><span>Yes</span></label>
+            <label class="opt"><input type="radio" name="guest_names" value="No"><span>No, a number is enough</span></label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- 7 ACCOMMODATION -->
+    <section class="step" data-title="Accommodation">
+      <h2>Accommodation</h2>
+      <p class="lead">Hotel info for out-of-town guests.</p>
+      <fieldset class="f" data-need><legend class="req">Include accommodation info?</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="accom" value="Yes" required><span>Yes</span></label>
+          <label class="opt"><input type="radio" name="accom" value="No"><span>No</span></label>
+        </div>
+      </fieldset>
+      <div data-when="accom=Yes">
+        <fieldset class="f" data-need><legend class="req">Who books the rooms?</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="accom_who" value="Guests book themselves" required><span>Guests book themselves</span></label>
+            <label class="opt"><input type="radio" name="accom_who" value="Couple arranges for selected guests"><span>We arrange for selected guests</span></label>
+            <label class="opt"><input type="radio" name="accom_who" value="Both"><span>Both</span></label>
+          </div>
+        </fieldset>
+        <div id="hotelBlocks"></div>
+        <button type="button" class="link" id="addHotel">Add another hotel</button>
+        <fieldset class="f" style="margin-top:14px" data-need><legend class="req">Should guests request rooms via RSVP?</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="accom_rsvp" value="Yes" required><span>Yes</span></label>
+            <label class="opt"><input type="radio" name="accom_rsvp" value="No"><span>No</span></label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- 8 TRANSPORT -->
+    <section class="step" data-title="Transportation">
+      <h2>Transportation</h2>
+      <p class="lead">Shuttle and private car services.</p>
+
+      <fieldset class="f" data-need><legend class="req">Do you provide a shuttle?</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="shuttle" value="Yes" required><span>Yes</span></label>
+          <label class="opt"><input type="radio" name="shuttle" value="No"><span>No</span></label>
+        </div>
+      </fieldset>
+      <div class="sub" data-when="shuttle=Yes">
+        <div class="f"><label class="req" for="shuttle_to">Hotel → Venue departure times<span class="hint">e.g. 11.00, 11.20, 11.40</span></label><textarea id="shuttle_to" name="shuttle_to" required></textarea></div>
+        <div class="f"><label class="req" for="shuttle_from">Venue → Hotel departure times<span class="hint">e.g. 10.40, 11.00</span></label><textarea id="shuttle_from" name="shuttle_from" required></textarea></div>
+        <div class="f"><label class="req" for="shuttle_points">Pickup points (hotel names) and seats per bus</label><textarea id="shuttle_points" name="shuttle_points" required></textarea></div>
+        <fieldset class="f" data-need><legend class="req">Add shuttle questions to the RSVP?</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="shuttle_rsvp" value="Yes" required><span>Yes<small>Guests pick a departure time and return trip.</small></span></label>
+            <label class="opt"><input type="radio" name="shuttle_rsvp" value="No"><span>No</span></label>
+          </div>
+        </fieldset>
+      </div>
+
+      <fieldset class="f" data-need><legend class="req">Do you offer private car on request?</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="car" value="Yes" required><span>Yes</span></label>
+          <label class="opt"><input type="radio" name="car" value="No"><span>No</span></label>
+        </div>
+      </fieldset>
+      <div class="sub" data-when="car=Yes">
+        <div class="f"><label class="req" for="car_area">Service area</label><input type="text" id="car_area" name="car_area" required></div>
+        <fieldset class="f" data-need><legend class="req">Who books the car?</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="car_booking" value="Couple books for guests" required><span>We book it for guests<small>Guests request a car and your coordinator arranges it.</small></span></label>
+            <label class="opt"><input type="radio" name="car_booking" value="Guests book themselves"><span>Guests book themselves<small>Guests open a direct booking link.</small></span></label>
+          </div>
+        </fieldset>
+        <div data-when="car_booking=Couple books for guests">
+          <div class="f"><label class="req" for="car_notice">Minimum notice (hours)</label><input type="number" id="car_notice" name="car_notice" value="24" min="1" required></div>
+          <div class="f"><label class="req" for="car_contact">Coordinator WhatsApp or email</label><input type="text" id="car_contact" name="car_contact" required></div>
+        </div>
+        <div data-when="car_booking=Guests book themselves">
+          <div class="f"><label class="req" for="car_link">Direct booking link<span class="hint">A link guests can tap to book, e.g. a WhatsApp chat link or a booking page.</span></label><input type="url" id="car_link" name="car_link" placeholder="https://" required></div>
+        </div>
+        <fieldset class="f" data-need><legend class="req">Who pays?</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="car_pays" value="Couple" required><span>Couple</span></label>
+            <label class="opt"><input type="radio" name="car_pays" value="Guest"><span>Guest</span></label>
+            <label class="opt"><input type="radio" name="car_pays" value="Shared"><span>Shared</span></label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- 9 DESIGN -->
+    <section class="step" data-title="Photos and design">
+      <h2>Photos and design</h2>
+      <p class="lead">Everything we need to make it look like you.</p>
+      <div class="f upload" data-up="photos" data-max="12" data-need-files data-or="drive_link"><label class="req" for="up_photos">Upload your photos<span class="hint">Cover photo, 4 for the love story, and gallery photos. Up to 12 photos here.</span></label><label class="pick"><input type="file" id="up_photos" class="sr" accept="image/*" multiple><span>Choose files</span></label><ul class="files" data-noi18n></ul><p class="uerr" role="alert"></p></div>
+      <div class="f"><label for="drive_link">Or paste a Google Drive link<span class="hint">Better for many photos or videos. Set access to "Anyone with the link". Required if you don't upload photos.</span></label><input type="url" id="drive_link" name="drive_link" placeholder="https://drive.google.com/..."></div>
+      <div class="f"><label for="photo_notes">Which photo goes where?<span class="hint">Cover, 4 for the love story, gallery. Note file names or links.</span></label><textarea id="photo_notes" name="photo_notes"></textarea></div>
+      <div class="f"><label for="style">Preferred colors and style<span class="hint">You can paste a reference link</span></label><input type="text" id="style" name="style"></div>
+      <fieldset class="f" data-need><legend class="req">Website language</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="language" value="English" required><span>English</span></label>
+          <label class="opt"><input type="radio" name="language" value="Indonesian"><span>Indonesian</span></label>
+          <label class="opt"><input type="radio" name="language" value="Bilingual"><span>Bilingual</span></label>
+          <label class="opt"><input type="radio" name="language" value="Other"><span>Other<small>Write the language you want.</small></span></label>
+        </div>
+      </fieldset>
+      <div class="sub" data-when="language=Other">
+        <div class="f"><label class="req" for="language_other">Which language?<span class="hint">e.g. Javanese, Mandarin, Dutch, or a mix like English + Javanese</span></label><input type="text" id="language_other" name="language_other" required></div>
+      </div>
+      <div class="f"><label for="song">Song request<span class="hint">Title and artist</span></label><input type="text" id="song" name="song"></div>
+      <div class="f"><label for="notes">Special notes</label><textarea id="notes" name="notes"></textarea></div>
+      <div class="f"><label class="req" for="delivery_date">Desired delivery date</label><input type="date" id="delivery_date" name="delivery_date" required></div>
+    </section>
+
+    <!-- 10 PAYMENT -->
+    <section class="step" data-title="Payment">
+      <h2>Payment</h2>
+      <p class="lead">Attach your proof of transfer so we can start on your order.</p>
+      <div class="f upload" data-up="payment_proof" data-max="3" data-need-files><label class="req" for="up_payment_proof">Proof of transfer<span class="hint">A screenshot or PDF of your payment. Up to 3 files, PDFs up to 3 MB each.</span></label><label class="pick"><input type="file" id="up_payment_proof" class="sr" accept="image/*,.pdf,application/pdf" multiple><span>Choose files</span></label><ul class="files"></ul><p class="uerr" role="alert"></p></div>
+    </section>
+
+    <!-- 11 AGREEMENT -->
+    <section class="step" data-title="Agreement">
+      <h2>Agreement</h2>
+      <p class="lead">Last step. Please confirm before sending.</p>
+      <fieldset class="f"><legend class="sr">Agreement</legend>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" name="ack_revisions" value="Yes" required><span>I understand that {rev} rounds of revisions are included and extra revisions are charged.</span></label>
+          <label class="opt"><input type="checkbox" name="agree_terms" value="Yes" required><span>I agree to the terms and conditions.</span></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <div class="nav">
+      <button type="button" class="primary" id="next">Send order</button>
+    </div>
+  </form>
+  </div>
+</main>
+
+<script>
+/* ====== SETTINGS: edit these ====== */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOWXyq2iKbX9frx0rS4Orl_l4Go167Sn70LsYqpxZJFJszsa_pe6TuT1CHaizPvAnjDA/exec';
+const REVISIONS  = 2;
+const GUEST_FORM_URL = 'guest-list-multilang.html';   // where your guest list form is hosted
+/* ================================== */
+
+/* ====== LANGUAGES ====== */
+const LANGS = {en:'English', de:'Deutsch', nl:'Nederlands', fr:'Français', da:'Dansk', ru:'Русский', es:'Español'};
+const I18N = {"de":{"Language":"Sprache","Order Form":"Bestellformular","Thank you for choosing us! Fill in the details below and we'll get started. Fields marked * are required.":"Vielen Dank, dass Sie sich für uns entschieden haben! Füllen Sie die Angaben unten aus, dann legen wir los. Mit * markierte Felder sind Pflichtfelder.","Contact":"Kontakt","How can we reach you?":"Wie können wir Sie erreichen?","Full name":"Vollständiger Name","WhatsApp number":"WhatsApp-Nummer","Include country code, e.g. +62 812 3456 7890":"Mit Ländervorwahl, z. B. +62 812 3456 7890","Email":"E-Mail","Wedding date":"Hochzeitsdatum","Where did you find us?":"Wie haben Sie uns gefunden?","Choose one":"Bitte wählen","Friend":"Freund/in","Other":"Sonstiges","Package":"Paket","Pick your template and any add-ons.":"Wählen Sie Ihre Vorlage und eventuelle Zusatzoptionen.","Template name or code":"Name oder Code der Vorlage","Add-ons":"Zusatzoptionen","Background music":"Hintergrundmusik","Photo gallery":"Fotogalerie","Extra language":"Zusätzliche Sprache","Live streaming link":"Livestream-Link","Rush delivery":"Express-Lieferung","Couple details":"Angaben zum Brautpaar","Names exactly as you want them to appear.":"Namen genau so, wie sie erscheinen sollen.","Bride's full name":"Vollständiger Name der Braut","Bride's short name":"Kurzname der Braut","Groom's full name":"Vollständiger Name des Bräutigams","Groom's short name":"Kurzname des Bräutigams","Name order on the invitation":"Reihenfolge der Namen auf der Einladung","Bride first":"Braut zuerst","Groom first":"Bräutigam zuerst","Monogram initials":"Initialen für das Monogramm","e.g. A & C":"z. B. A & C","Parents' names (optional)":"Namen der Eltern (optional)","Contact email shown on the website":"Auf der Website angezeigte Kontakt-E-Mail","Events and venue":"Veranstaltungen und Location","Choose your events, then fill in the details for each.":"Wählen Sie Ihre Veranstaltungen und ergänzen Sie dann die Angaben zu jeder.","Which events will be included?":"Welche Veranstaltungen sollen enthalten sein?","Ceremony":"Trauung","Reception":"Empfang","Welcome dinner":"Willkommensdinner","Dress code":"Dresscode","Gift or registry info (optional)":"Infos zu Geschenken oder Hochzeitsliste (optional)","Our Love Story":"Unsere Liebesgeschichte","The story page on your website.":"Die Story-Seite auf Ihrer Website.","Who writes the story?":"Wer schreibt die Geschichte?","I'll write it":"Ich schreibe sie selbst","Please help me write it":"Bitte helfen Sie mir beim Schreiben","Paste your story":"Fügen Sie Ihre Geschichte ein","How did you meet, when did you get engaged, any special moment?":"Wie haben Sie sich kennengelernt, wann haben Sie sich verlobt, gibt es besondere Momente?","RSVP setup":"RSVP-Einrichtung","What your guests will be asked when they reply.":"Was Ihre Gäste bei der Antwort gefragt werden.","RSVP deadline":"RSVP-Frist","Which events can guests RSVP to?":"Für welche Veranstaltungen können Gäste zusagen?","Choose your events in the Events section first.":"Wählen Sie zuerst im Abschnitt „Veranstaltungen“ Ihre Veranstaltungen aus.","Choose your events in the previous step first.":"Wählen Sie zuerst im vorherigen Schritt Ihre Veranstaltungen aus.","Meal service":"Verpflegung","Buffet":"Buffet","Guests only list dietary requirements.":"Gäste geben nur Ernährungswünsche an.","Set menu":"Menü","Each guest picks a main course.":"Jeder Gast wählt ein Hauptgericht.","Set menu options":"Menü-Optionen","One per line, e.g. Beef, Chicken, Fish, Vegetarian. Each guest chooses their own.":"Eine pro Zeile, z. B. Rind, Huhn, Fisch, Vegetarisch. Jeder Gast wählt selbst.","Menu photos (optional)":"Menüfotos (optional)","A photo of each dish or your menu card. Up to 6 photos.":"Ein Foto jedes Gerichts oder Ihrer Menükarte. Bis zu 6 Fotos.","Choose files":"Dateien auswählen","Can guests bring additional guests?":"Dürfen Gäste Begleitpersonen mitbringen?","Yes":"Ja","No":"Nein","No, the invitation is for the named guest only":"Nein, die Einladung gilt nur für den namentlich genannten Gast","Maximum additional guests per invitation":"Maximale Anzahl zusätzlicher Gäste pro Einladung","Not counting the invited guest. e.g. 1 for a plus-one.":"Ohne den eingeladenen Gast. Z. B. 1 für eine Begleitung.","Should guests list the names of additional guests?":"Sollen Gäste die Namen der Begleitpersonen angeben?","No, a number is enough":"Nein, eine Zahl genügt","Accommodation":"Unterkunft","Hotel info for out-of-town guests.":"Hotelinfos für auswärtige Gäste.","Include accommodation info?":"Unterkunftsinfos aufnehmen?","Who books the rooms?":"Wer bucht die Zimmer?","Guests book themselves":"Gäste buchen selbst","We arrange for selected guests":"Wir organisieren es für ausgewählte Gäste","Both":"Beides","Add another hotel":"Weiteres Hotel hinzufügen","Should guests request rooms via RSVP?":"Sollen Gäste Zimmer über die RSVP anfragen?","Transportation":"Transport","Shuttle and private car services.":"Shuttle- und Privatwagenservice.","Do you provide a shuttle?":"Gibt es einen Shuttle-Service?","Hotel → Venue departure times":"Abfahrtszeiten Hotel → Location","e.g. 11.00, 11.20, 11.40":"z. B. 11.00, 11.20, 11.40","Venue → Hotel departure times":"Abfahrtszeiten Location → Hotel","e.g. 10.40, 11.00":"z. B. 10.40, 11.00","Pickup points (hotel names) and seats per bus":"Abholpunkte (Hotelnamen) und Sitzplätze pro Bus","Add shuttle questions to the RSVP?":"Shuttle-Fragen in die RSVP aufnehmen?","Guests pick a departure time and return trip.":"Gäste wählen eine Abfahrtszeit und die Rückfahrt.","Do you offer private car on request?":"Gibt es auf Anfrage einen Privatwagenservice?","Service area":"Einsatzgebiet","Who books the car?":"Wer bucht das Fahrzeug?","We book it for guests":"Wir buchen es für die Gäste","Guests request a car and your coordinator arranges it.":"Gäste fragen ein Fahrzeug an, und Ihr Koordinator organisiert es.","Guests open a direct booking link.":"Gäste öffnen einen direkten Buchungslink.","Minimum notice (hours)":"Mindestvorlaufzeit (Stunden)","Coordinator WhatsApp or email":"WhatsApp oder E-Mail des Koordinators","Direct booking link":"Direkter Buchungslink","A link guests can tap to book, e.g. a WhatsApp chat link or a booking page.":"Ein Link, den Gäste zum Buchen antippen können, z. B. ein WhatsApp-Chat-Link oder eine Buchungsseite.","Who pays?":"Wer zahlt?","Couple":"Brautpaar","Guest":"Gast","Shared":"Geteilt","Photos and design":"Fotos und Design","Everything we need to make it look like you.":"Alles, was wir brauchen, damit es zu Ihnen passt.","Upload your photos":"Laden Sie Ihre Fotos hoch","Cover photo, 4 for the love story, and gallery photos. Up to 12 photos here.":"Titelbild, 4 für die Liebesgeschichte und Galeriefotos. Hier bis zu 12 Fotos.","Or paste a Google Drive link":"Oder fügen Sie einen Google-Drive-Link ein","Better for many photos or videos. Set access to \"Anyone with the link\". Required if you don't upload photos.":"Besser bei vielen Fotos oder Videos. Stellen Sie den Zugriff auf „Jeder mit dem Link“ ein. Erforderlich, wenn Sie keine Fotos hochladen.","Which photo goes where?":"Welches Foto kommt wohin?","Cover, 4 for the love story, gallery. Note file names or links.":"Titelbild, 4 für die Liebesgeschichte, Galerie. Geben Sie Dateinamen oder Links an.","Preferred colors and style":"Bevorzugte Farben und Stil","You can paste a reference link":"Sie können einen Referenzlink einfügen","Website language":"Sprache der Website","English":"Englisch","Indonesian":"Indonesisch","Bilingual":"Zweisprachig","Write the language you want.":"Schreiben Sie die gewünschte Sprache.","Which language?":"Welche Sprache?","e.g. Javanese, Mandarin, Dutch, or a mix like English + Javanese":"z. B. Javanisch, Mandarin, Niederländisch oder eine Mischung wie Englisch + Javanisch","Song request":"Musikwunsch","Title and artist":"Titel und Interpret","Special notes":"Besondere Hinweise","Desired delivery date":"Gewünschtes Lieferdatum","Agreement":"Einverständnis","Last step. Please confirm before sending.":"Letzter Schritt. Bitte vor dem Absenden bestätigen.","I understand that {rev} rounds of revisions are included and extra revisions are charged.":"Mir ist bewusst, dass {rev} Korrekturrunden inbegriffen sind und weitere Korrekturen berechnet werden.","I agree to the terms and conditions.":"Ich stimme den Geschäftsbedingungen zu.","Send order":"Bestellung absenden","Done":"Erledigt","To do":"Offen","{done} of {total} sections done":"{done} von {total} Abschnitten erledigt","You can add up to {max} files here.":"Hier können Sie bis zu {max} Dateien hinzufügen.","Total upload size is too big. Use the Drive link for the rest.":"Die Gesamtgröße ist zu groß. Nutzen Sie für den Rest den Drive-Link.","{name} is over 3 MB.":"{name} ist größer als 3 MB.","{name} could not be read. Please use JPG or PNG.":"{name} konnte nicht gelesen werden. Bitte JPG oder PNG verwenden.","Remove {name}":"{name} entfernen","Please upload a file, or paste a link below.":"Bitte laden Sie eine Datei hoch oder fügen Sie unten einen Link ein.","Please upload at least one file.":"Bitte laden Sie mindestens eine Datei hoch.","Please choose at least one option.":"Bitte wählen Sie mindestens eine Option.","Event name":"Name der Veranstaltung","Date":"Datum","Time":"Uhrzeit","Venue name":"Name der Location","Full address":"Vollständige Adresse","Google Maps link":"Google-Maps-Link","Hotel 1":"Hotel 1","Hotel 2":"Hotel 2","Hotel 3":"Hotel 3","Hotel name":"Hotelname","Address":"Adresse","Distance to venue":"Entfernung zur Location","Price per night":"Preis pro Nacht","Booking link or promo code":"Buchungslink oder Promo-Code","Booking cut-off date":"Buchungsschluss","Hotel contact":"Hotelkontakt","Sending... keep this page open":"Wird gesendet … Seite bitte geöffnet lassen","Could not send. Check your connection and try again.":"Senden fehlgeschlagen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.","Thank you, {name}.":"Vielen Dank, {name}.","We received your order and will message you on WhatsApp soon. A confirmation is on its way to {email}.":"Wir haben Ihre Bestellung erhalten und melden uns bald per WhatsApp. Eine Bestätigung ist unterwegs an {email}.","Your order":"Ihre Bestellung","Your order code":"Ihr Bestellcode","Save this code. You will need it to send us your guest list.":"Bewahren Sie diesen Code auf. Sie benötigen ihn, um uns Ihre Gästeliste zu senden.","Add your guest list":"Gästeliste hinzufügen","Your order code will be in the confirmation email we send you.":"Ihren Bestellcode finden Sie in der Bestätigungs-E-Mail, die wir Ihnen senden.","Payment":"Zahlung","Attach your proof of transfer so we can start on your order.":"Fügen Sie Ihren Überweisungsbeleg bei, damit wir mit Ihrer Bestellung beginnen können.","Proof of transfer":"Überweisungsbeleg","A screenshot or PDF of your payment. Up to 3 files, PDFs up to 3 MB each.":"Ein Screenshot oder PDF Ihrer Zahlung. Bis zu 3 Dateien, PDFs je max. 3 MB."},"nl":{"Language":"Taal","Order Form":"Bestelformulier","Thank you for choosing us! Fill in the details below and we'll get started. Fields marked * are required.":"Bedankt dat u voor ons kiest! Vul de gegevens hieronder in en wij gaan aan de slag. Velden met * zijn verplicht.","Contact":"Contact","How can we reach you?":"Hoe kunnen we u bereiken?","Full name":"Volledige naam","WhatsApp number":"WhatsApp-nummer","Include country code, e.g. +62 812 3456 7890":"Met landcode, bijv. +62 812 3456 7890","Email":"E-mail","Wedding date":"Trouwdatum","Where did you find us?":"Hoe heeft u ons gevonden?","Choose one":"Maak een keuze","Friend":"Vriend(in)","Other":"Anders","Package":"Pakket","Pick your template and any add-ons.":"Kies uw template en eventuele extra opties.","Template name or code":"Naam of code van de template","Add-ons":"Extra opties","Background music":"Achtergrondmuziek","Photo gallery":"Fotogalerij","Extra language":"Extra taal","Live streaming link":"Livestream-link","Rush delivery":"Spoedlevering","Couple details":"Gegevens van het bruidspaar","Names exactly as you want them to appear.":"Namen precies zoals ze moeten verschijnen.","Bride's full name":"Volledige naam van de bruid","Bride's short name":"Roepnaam van de bruid","Groom's full name":"Volledige naam van de bruidegom","Groom's short name":"Roepnaam van de bruidegom","Name order on the invitation":"Volgorde van de namen op de uitnodiging","Bride first":"Bruid eerst","Groom first":"Bruidegom eerst","Monogram initials":"Initialen voor het monogram","e.g. A & C":"bijv. A & C","Parents' names (optional)":"Namen van de ouders (optioneel)","Contact email shown on the website":"Contact-e-mailadres op de website","Events and venue":"Evenementen en locatie","Choose your events, then fill in the details for each.":"Kies uw evenementen en vul daarna de gegevens voor elk in.","Which events will be included?":"Welke evenementen moeten erbij?","Ceremony":"Ceremonie","Reception":"Receptie","Welcome dinner":"Welkomstdiner","Dress code":"Dresscode","Gift or registry info (optional)":"Informatie over cadeaus of cadeaulijst (optioneel)","Our Love Story":"Ons liefdesverhaal","The story page on your website.":"De verhaalpagina op uw website.","Who writes the story?":"Wie schrijft het verhaal?","I'll write it":"Ik schrijf het zelf","Please help me write it":"Help me alstublieft met schrijven","Paste your story":"Plak uw verhaal","How did you meet, when did you get engaged, any special moment?":"Hoe hebt u elkaar ontmoet, wanneer verloofde u zich, zijn er bijzondere momenten?","RSVP setup":"RSVP-instellingen","What your guests will be asked when they reply.":"Wat uw gasten wordt gevraagd wanneer ze reageren.","RSVP deadline":"Uiterste RSVP-datum","Which events can guests RSVP to?":"Voor welke evenementen kunnen gasten reageren?","Choose your events in the Events section first.":"Kies eerst uw evenementen in het gedeelte Evenementen.","Choose your events in the previous step first.":"Kies eerst uw evenementen in de vorige stap.","Meal service":"Maaltijdservice","Buffet":"Buffet","Guests only list dietary requirements.":"Gasten geven alleen dieetwensen op.","Set menu":"Vast menu","Each guest picks a main course.":"Elke gast kiest een hoofdgerecht.","Set menu options":"Opties voor het vaste menu","One per line, e.g. Beef, Chicken, Fish, Vegetarian. Each guest chooses their own.":"Eén per regel, bijv. rund, kip, vis, vegetarisch. Elke gast kiest zelf.","Menu photos (optional)":"Foto's van het menu (optioneel)","A photo of each dish or your menu card. Up to 6 photos.":"Een foto van elk gerecht of van uw menukaart. Maximaal 6 foto's.","Choose files":"Bestanden kiezen","Can guests bring additional guests?":"Mogen gasten extra gasten meenemen?","Yes":"Ja","No":"Nee","No, the invitation is for the named guest only":"Nee, de uitnodiging geldt alleen voor de genoemde gast","Maximum additional guests per invitation":"Maximaal aantal extra gasten per uitnodiging","Not counting the invited guest. e.g. 1 for a plus-one.":"Zonder de uitgenodigde gast mee te tellen. Bijv. 1 voor een plus-one.","Should guests list the names of additional guests?":"Moeten gasten de namen van extra gasten opgeven?","No, a number is enough":"Nee, een aantal is genoeg","Accommodation":"Accommodatie","Hotel info for out-of-town guests.":"Hotelinformatie voor gasten van buiten de stad.","Include accommodation info?":"Accommodatiegegevens opnemen?","Who books the rooms?":"Wie boekt de kamers?","Guests book themselves":"Gasten boeken zelf","We arrange for selected guests":"Wij regelen het voor bepaalde gasten","Both":"Beide","Add another hotel":"Nog een hotel toevoegen","Should guests request rooms via RSVP?":"Moeten gasten kamers aanvragen via de RSVP?","Transportation":"Vervoer","Shuttle and private car services.":"Shuttle- en privéautoservice.","Do you provide a shuttle?":"Is er een shuttleservice?","Hotel → Venue departure times":"Vertrektijden hotel → locatie","e.g. 11.00, 11.20, 11.40":"bijv. 11.00, 11.20, 11.40","Venue → Hotel departure times":"Vertrektijden locatie → hotel","e.g. 10.40, 11.00":"bijv. 10.40, 11.00","Pickup points (hotel names) and seats per bus":"Ophaalpunten (hotelnamen) en zitplaatsen per bus","Add shuttle questions to the RSVP?":"Shuttlevragen toevoegen aan de RSVP?","Guests pick a departure time and return trip.":"Gasten kiezen een vertrektijd en de terugrit.","Do you offer private car on request?":"Is er op verzoek een privéauto beschikbaar?","Service area":"Servicegebied","Who books the car?":"Wie boekt de auto?","We book it for guests":"Wij boeken het voor de gasten","Guests request a car and your coordinator arranges it.":"Gasten vragen een auto aan en uw coördinator regelt het.","Guests open a direct booking link.":"Gasten openen een directe boekingslink.","Minimum notice (hours)":"Minimale aanvraagtermijn (uren)","Coordinator WhatsApp or email":"WhatsApp of e-mail van de coördinator","Direct booking link":"Directe boekingslink","A link guests can tap to book, e.g. a WhatsApp chat link or a booking page.":"Een link waarop gasten kunnen tikken om te boeken, bijv. een WhatsApp-link of een boekingspagina.","Who pays?":"Wie betaalt?","Couple":"Bruidspaar","Guest":"Gast","Shared":"Gedeeld","Photos and design":"Foto's en ontwerp","Everything we need to make it look like you.":"Alles wat we nodig hebben om het bij u te laten passen.","Upload your photos":"Upload uw foto's","Cover photo, 4 for the love story, and gallery photos. Up to 12 photos here.":"Omslagfoto, 4 voor het liefdesverhaal en galerijfoto's. Maximaal 12 foto's hier.","Or paste a Google Drive link":"Of plak een Google Drive-link","Better for many photos or videos. Set access to \"Anyone with the link\". Required if you don't upload photos.":"Beter voor veel foto's of video's. Stel de toegang in op \"Iedereen met de link\". Verplicht als u geen foto's uploadt.","Which photo goes where?":"Welke foto komt waar?","Cover, 4 for the love story, gallery. Note file names or links.":"Omslag, 4 voor het liefdesverhaal, galerij. Vermeld bestandsnamen of links.","Preferred colors and style":"Gewenste kleuren en stijl","You can paste a reference link":"U kunt een referentielink plakken","Website language":"Taal van de website","English":"Engels","Indonesian":"Indonesisch","Bilingual":"Tweetalig","Write the language you want.":"Vul de gewenste taal in.","Which language?":"Welke taal?","e.g. Javanese, Mandarin, Dutch, or a mix like English + Javanese":"bijv. Javaans, Mandarijn, Nederlands of een combinatie zoals Engels + Javaans","Song request":"Muziekverzoek","Title and artist":"Titel en artiest","Special notes":"Bijzondere opmerkingen","Desired delivery date":"Gewenste opleverdatum","Agreement":"Akkoord","Last step. Please confirm before sending.":"Laatste stap. Bevestig voordat u verstuurt.","I understand that {rev} rounds of revisions are included and extra revisions are charged.":"Ik begrijp dat {rev} aanpassingsrondes zijn inbegrepen en extra aanpassingen worden berekend.","I agree to the terms and conditions.":"Ik ga akkoord met de algemene voorwaarden.","Send order":"Bestelling versturen","Done":"Klaar","To do":"Te doen","{done} of {total} sections done":"{done} van {total} secties voltooid","You can add up to {max} files here.":"U kunt hier maximaal {max} bestanden toevoegen.","Total upload size is too big. Use the Drive link for the rest.":"De totale uploadgrootte is te groot. Gebruik voor de rest de Drive-link.","{name} is over 3 MB.":"{name} is groter dan 3 MB.","{name} could not be read. Please use JPG or PNG.":"{name} kon niet worden gelezen. Gebruik JPG of PNG.","Remove {name}":"{name} verwijderen","Please upload a file, or paste a link below.":"Upload een bestand of plak hieronder een link.","Please upload at least one file.":"Upload minstens één bestand.","Please choose at least one option.":"Kies minstens één optie.","Event name":"Naam van het evenement","Date":"Datum","Time":"Tijd","Venue name":"Naam van de locatie","Full address":"Volledig adres","Google Maps link":"Google Maps-link","Hotel 1":"Hotel 1","Hotel 2":"Hotel 2","Hotel 3":"Hotel 3","Hotel name":"Naam van het hotel","Address":"Adres","Distance to venue":"Afstand tot de locatie","Price per night":"Prijs per nacht","Booking link or promo code":"Boekingslink of promotiecode","Booking cut-off date":"Uiterste boekingsdatum","Hotel contact":"Contact van het hotel","Sending... keep this page open":"Verzenden... houd deze pagina open","Could not send. Check your connection and try again.":"Verzenden mislukt. Controleer uw verbinding en probeer het opnieuw.","Thank you, {name}.":"Bedankt, {name}.","We received your order and will message you on WhatsApp soon. A confirmation is on its way to {email}.":"We hebben uw bestelling ontvangen en sturen u binnenkort een WhatsApp-bericht. Een bevestiging is onderweg naar {email}.","Your order":"Uw bestelling","Your order code":"Uw bestelcode","Save this code. You will need it to send us your guest list.":"Bewaar deze code. U heeft hem nodig om ons uw gastenlijst te sturen.","Add your guest list":"Gastenlijst toevoegen","Your order code will be in the confirmation email we send you.":"U vindt uw bestelcode in de bevestigingsmail die wij u sturen.","Payment":"Betaling","Attach your proof of transfer so we can start on your order.":"Voeg uw betaalbewijs toe zodat we met uw bestelling kunnen beginnen.","Proof of transfer":"Betaalbewijs","A screenshot or PDF of your payment. Up to 3 files, PDFs up to 3 MB each.":"Een screenshot of pdf van uw betaling. Maximaal 3 bestanden, pdf's max. 3 MB per stuk."},"fr":{"Language":"Langue","Order Form":"Bon de commande","Thank you for choosing us! Fill in the details below and we'll get started. Fields marked * are required.":"Merci de nous avoir choisis ! Remplissez les informations ci-dessous et nous nous mettons au travail. Les champs marqués d'un * sont obligatoires.","Contact":"Contact","How can we reach you?":"Comment pouvons-nous vous joindre ?","Full name":"Nom complet","WhatsApp number":"Numéro WhatsApp","Include country code, e.g. +62 812 3456 7890":"Avec l'indicatif du pays, p. ex. +62 812 3456 7890","Email":"E-mail","Wedding date":"Date du mariage","Where did you find us?":"Comment nous avez-vous connus ?","Choose one":"Choisissez","Friend":"Un(e) ami(e)","Other":"Autre","Package":"Formule","Pick your template and any add-ons.":"Choisissez votre modèle et vos options éventuelles.","Template name or code":"Nom ou code du modèle","Add-ons":"Options","Background music":"Musique de fond","Photo gallery":"Galerie photo","Extra language":"Langue supplémentaire","Live streaming link":"Lien de diffusion en direct","Rush delivery":"Livraison express","Couple details":"Informations sur les mariés","Names exactly as you want them to appear.":"Les noms exactement comme vous voulez qu'ils apparaissent.","Bride's full name":"Nom complet de la mariée","Bride's short name":"Prénom usuel de la mariée","Groom's full name":"Nom complet du marié","Groom's short name":"Prénom usuel du marié","Name order on the invitation":"Ordre des noms sur le faire-part","Bride first":"La mariée en premier","Groom first":"Le marié en premier","Monogram initials":"Initiales du monogramme","e.g. A & C":"p. ex. A & C","Parents' names (optional)":"Noms des parents (facultatif)","Contact email shown on the website":"E-mail de contact affiché sur le site","Events and venue":"Événements et lieux","Choose your events, then fill in the details for each.":"Choisissez vos événements, puis renseignez les détails de chacun.","Which events will be included?":"Quels événements inclure ?","Ceremony":"Cérémonie","Reception":"Réception","Welcome dinner":"Dîner de bienvenue","Dress code":"Code vestimentaire","Gift or registry info (optional)":"Infos cadeaux ou liste de mariage (facultatif)","Our Love Story":"Notre histoire d'amour","The story page on your website.":"La page de votre histoire sur le site.","Who writes the story?":"Qui rédige l'histoire ?","I'll write it":"Je l'écris moi-même","Please help me write it":"Aidez-moi à la rédiger","Paste your story":"Collez votre histoire","How did you meet, when did you get engaged, any special moment?":"Comment vous êtes-vous rencontrés, quand vous êtes-vous fiancés, un moment particulier ?","RSVP setup":"Configuration du RSVP","What your guests will be asked when they reply.":"Ce que vos invités devront renseigner en répondant.","RSVP deadline":"Date limite de réponse (RSVP)","Which events can guests RSVP to?":"À quels événements les invités peuvent-ils répondre ?","Choose your events in the Events section first.":"Choisissez d'abord vos événements dans la section Événements.","Choose your events in the previous step first.":"Choisissez d'abord vos événements à l'étape précédente.","Meal service":"Service du repas","Buffet":"Buffet","Guests only list dietary requirements.":"Les invités indiquent seulement leurs régimes alimentaires.","Set menu":"Menu fixe","Each guest picks a main course.":"Chaque invité choisit un plat principal.","Set menu options":"Choix du menu fixe","One per line, e.g. Beef, Chicken, Fish, Vegetarian. Each guest chooses their own.":"Un par ligne, p. ex. bœuf, poulet, poisson, végétarien. Chaque invité choisit pour lui-même.","Menu photos (optional)":"Photos du menu (facultatif)","A photo of each dish or your menu card. Up to 6 photos.":"Une photo de chaque plat ou de votre carte de menu. Jusqu'à 6 photos.","Choose files":"Choisir des fichiers","Can guests bring additional guests?":"Les invités peuvent-ils venir accompagnés ?","Yes":"Oui","No":"Non","No, the invitation is for the named guest only":"Non, l'invitation est réservée à l'invité nommé","Maximum additional guests per invitation":"Nombre maximum d'invités supplémentaires par invitation","Not counting the invited guest. e.g. 1 for a plus-one.":"Sans compter l'invité. P. ex. 1 pour un(e) accompagnant(e).","Should guests list the names of additional guests?":"Les invités doivent-ils indiquer le nom des accompagnants ?","No, a number is enough":"Non, un nombre suffit","Accommodation":"Hébergement","Hotel info for out-of-town guests.":"Infos hôtels pour les invités venant de loin.","Include accommodation info?":"Inclure les infos d'hébergement ?","Who books the rooms?":"Qui réserve les chambres ?","Guests book themselves":"Les invités réservent eux-mêmes","We arrange for selected guests":"Nous nous en occupons pour certains invités","Both":"Les deux","Add another hotel":"Ajouter un autre hôtel","Should guests request rooms via RSVP?":"Les invités doivent-ils demander une chambre via le RSVP ?","Transportation":"Transport","Shuttle and private car services.":"Navette et voiture avec chauffeur.","Do you provide a shuttle?":"Y a-t-il une navette ?","Hotel → Venue departure times":"Horaires de départ hôtel → lieu","e.g. 11.00, 11.20, 11.40":"p. ex. 11.00, 11.20, 11.40","Venue → Hotel departure times":"Horaires de départ lieu → hôtel","e.g. 10.40, 11.00":"p. ex. 10.40, 11.00","Pickup points (hotel names) and seats per bus":"Points de ramassage (noms des hôtels) et places par bus","Add shuttle questions to the RSVP?":"Ajouter des questions sur la navette au RSVP ?","Guests pick a departure time and return trip.":"Les invités choisissent un horaire de départ et de retour.","Do you offer private car on request?":"Une voiture privée est-elle disponible sur demande ?","Service area":"Zone de service","Who books the car?":"Qui réserve la voiture ?","We book it for guests":"Nous la réservons pour les invités","Guests request a car and your coordinator arranges it.":"Les invités demandent une voiture et votre coordinateur s'en occupe.","Guests open a direct booking link.":"Les invités ouvrent un lien de réservation direct.","Minimum notice (hours)":"Délai minimum (heures)","Coordinator WhatsApp or email":"WhatsApp ou e-mail du coordinateur","Direct booking link":"Lien de réservation direct","A link guests can tap to book, e.g. a WhatsApp chat link or a booking page.":"Un lien sur lequel les invités appuient pour réserver, p. ex. un lien de discussion WhatsApp ou une page de réservation.","Who pays?":"Qui paie ?","Couple":"Les mariés","Guest":"L'invité","Shared":"Partagé","Photos and design":"Photos et design","Everything we need to make it look like you.":"Tout ce qu'il nous faut pour que ça vous ressemble.","Upload your photos":"Téléversez vos photos","Cover photo, 4 for the love story, and gallery photos. Up to 12 photos here.":"Photo de couverture, 4 pour l'histoire d'amour et les photos de la galerie. Jusqu'à 12 photos ici.","Or paste a Google Drive link":"Ou collez un lien Google Drive","Better for many photos or videos. Set access to \"Anyone with the link\". Required if you don't upload photos.":"Préférable pour beaucoup de photos ou de vidéos. Réglez l'accès sur « Tous les utilisateurs disposant du lien ». Obligatoire si vous ne téléversez pas de photos.","Which photo goes where?":"Quelle photo va où ?","Cover, 4 for the love story, gallery. Note file names or links.":"Couverture, 4 pour l'histoire d'amour, galerie. Indiquez les noms de fichiers ou les liens.","Preferred colors and style":"Couleurs et style souhaités","You can paste a reference link":"Vous pouvez coller un lien de référence","Website language":"Langue du site","English":"Anglais","Indonesian":"Indonésien","Bilingual":"Bilingue","Write the language you want.":"Indiquez la langue souhaitée.","Which language?":"Quelle langue ?","e.g. Javanese, Mandarin, Dutch, or a mix like English + Javanese":"p. ex. javanais, mandarin, néerlandais, ou un mélange comme anglais + javanais","Song request":"Chanson souhaitée","Title and artist":"Titre et artiste","Special notes":"Remarques particulières","Desired delivery date":"Date de livraison souhaitée","Agreement":"Accord","Last step. Please confirm before sending.":"Dernière étape. Veuillez confirmer avant l'envoi.","I understand that {rev} rounds of revisions are included and extra revisions are charged.":"Je comprends que {rev} séries de modifications sont incluses et que les modifications supplémentaires sont facturées.","I agree to the terms and conditions.":"J'accepte les conditions générales.","Send order":"Envoyer la commande","Done":"Terminé","To do":"À faire","{done} of {total} sections done":"{done} sur {total} sections terminées","You can add up to {max} files here.":"Vous pouvez ajouter jusqu'à {max} fichiers ici.","Total upload size is too big. Use the Drive link for the rest.":"La taille totale est trop importante. Utilisez le lien Drive pour le reste.","{name} is over 3 MB.":"{name} dépasse 3 Mo.","{name} could not be read. Please use JPG or PNG.":"{name} n'a pas pu être lu. Utilisez du JPG ou du PNG.","Remove {name}":"Supprimer {name}","Please upload a file, or paste a link below.":"Téléversez un fichier ou collez un lien ci-dessous.","Please upload at least one file.":"Téléversez au moins un fichier.","Please choose at least one option.":"Choisissez au moins une option.","Event name":"Nom de l'événement","Date":"Date","Time":"Heure","Venue name":"Nom du lieu","Full address":"Adresse complète","Google Maps link":"Lien Google Maps","Hotel 1":"Hôtel 1","Hotel 2":"Hôtel 2","Hotel 3":"Hôtel 3","Hotel name":"Nom de l'hôtel","Address":"Adresse","Distance to venue":"Distance jusqu'au lieu","Price per night":"Prix par nuit","Booking link or promo code":"Lien de réservation ou code promo","Booking cut-off date":"Date limite de réservation","Hotel contact":"Contact de l'hôtel","Sending... keep this page open":"Envoi en cours... gardez cette page ouverte","Could not send. Check your connection and try again.":"Échec de l'envoi. Vérifiez votre connexion et réessayez.","Thank you, {name}.":"Merci, {name}.","We received your order and will message you on WhatsApp soon. A confirmation is on its way to {email}.":"Nous avons bien reçu votre commande et vous écrirons bientôt sur WhatsApp. Une confirmation est en route vers {email}.","Your order":"Votre commande","Your order code":"Votre code de commande","Save this code. You will need it to send us your guest list.":"Conservez ce code. Il vous servira à nous envoyer votre liste d'invités.","Add your guest list":"Ajouter votre liste d'invités","Your order code will be in the confirmation email we send you.":"Vous trouverez votre code de commande dans l'e-mail de confirmation que nous vous envoyons.","Payment":"Paiement","Attach your proof of transfer so we can start on your order.":"Joignez votre preuve de virement pour que nous puissions commencer votre commande.","Proof of transfer":"Preuve de virement","A screenshot or PDF of your payment. Up to 3 files, PDFs up to 3 MB each.":"Une capture d'écran ou un PDF de votre paiement. Jusqu'à 3 fichiers, PDF de 3 Mo maximum chacun."},"da":{"Language":"Sprog","Order Form":"Bestillingsformular","Thank you for choosing us! Fill in the details below and we'll get started. Fields marked * are required.":"Tak fordi du valgte os! Udfyld oplysningerne herunder, så går vi i gang. Felter med * er obligatoriske.","Contact":"Kontakt","How can we reach you?":"Hvordan kan vi kontakte dig?","Full name":"Fulde navn","WhatsApp number":"WhatsApp-nummer","Include country code, e.g. +62 812 3456 7890":"Med landekode, fx +62 812 3456 7890","Email":"E-mail","Wedding date":"Bryllupsdato","Where did you find us?":"Hvordan fandt du os?","Choose one":"Vælg en","Friend":"En ven","Other":"Andet","Package":"Pakke","Pick your template and any add-ons.":"Vælg din skabelon og eventuelle tilvalg.","Template name or code":"Skabelonens navn eller kode","Add-ons":"Tilvalg","Background music":"Baggrundsmusik","Photo gallery":"Fotogalleri","Extra language":"Ekstra sprog","Live streaming link":"Link til livestream","Rush delivery":"Ekspreslevering","Couple details":"Oplysninger om brudeparret","Names exactly as you want them to appear.":"Navne præcis, som de skal vises.","Bride's full name":"Brudens fulde navn","Bride's short name":"Brudens kaldenavn","Groom's full name":"Brudgommens fulde navn","Groom's short name":"Brudgommens kaldenavn","Name order on the invitation":"Rækkefølge af navne på invitationen","Bride first":"Bruden først","Groom first":"Brudgommen først","Monogram initials":"Initialer til monogram","e.g. A & C":"fx A & C","Parents' names (optional)":"Forældrenes navne (valgfrit)","Contact email shown on the website":"Kontakt-e-mail vist på hjemmesiden","Events and venue":"Begivenheder og lokale","Choose your events, then fill in the details for each.":"Vælg dine begivenheder, og udfyld derefter oplysningerne for hver af dem.","Which events will be included?":"Hvilke begivenheder skal med?","Ceremony":"Ceremoni","Reception":"Reception","Welcome dinner":"Velkomstmiddag","Dress code":"Dresscode","Gift or registry info (optional)":"Oplysninger om gaver eller ønskeliste (valgfrit)","Our Love Story":"Vores kærlighedshistorie","The story page on your website.":"Historiesiden på din hjemmeside.","Who writes the story?":"Hvem skriver historien?","I'll write it":"Jeg skriver den selv","Please help me write it":"Hjælp mig venligst med at skrive den","Paste your story":"Indsæt din historie","How did you meet, when did you get engaged, any special moment?":"Hvordan mødtes I, hvornår blev I forlovet, og er der særlige øjeblikke?","RSVP setup":"RSVP-opsætning","What your guests will be asked when they reply.":"Hvad dine gæster bliver spurgt om, når de svarer.","RSVP deadline":"Svarfrist (RSVP)","Which events can guests RSVP to?":"Hvilke begivenheder kan gæsterne svare på?","Choose your events in the Events section first.":"Vælg først dine begivenheder i afsnittet Begivenheder.","Choose your events in the previous step first.":"Vælg først dine begivenheder i det forrige trin.","Meal service":"Måltidsform","Buffet":"Buffet","Guests only list dietary requirements.":"Gæster angiver kun kostønsker.","Set menu":"Fast menu","Each guest picks a main course.":"Hver gæst vælger en hovedret.","Set menu options":"Valgmuligheder til fast menu","One per line, e.g. Beef, Chicken, Fish, Vegetarian. Each guest chooses their own.":"Én pr. linje, fx oksekød, kylling, fisk, vegetarisk. Hver gæst vælger selv.","Menu photos (optional)":"Billeder af menuen (valgfrit)","A photo of each dish or your menu card. Up to 6 photos.":"Et billede af hver ret eller dit menukort. Op til 6 billeder.","Choose files":"Vælg filer","Can guests bring additional guests?":"Må gæster tage ekstra gæster med?","Yes":"Ja","No":"Nej","No, the invitation is for the named guest only":"Nej, invitationen gælder kun den navngivne gæst","Maximum additional guests per invitation":"Maksimalt antal ekstra gæster pr. invitation","Not counting the invited guest. e.g. 1 for a plus-one.":"Uden den inviterede gæst. Fx 1 til en ledsager.","Should guests list the names of additional guests?":"Skal gæster angive navnene på ekstra gæster?","No, a number is enough":"Nej, et antal er nok","Accommodation":"Overnatning","Hotel info for out-of-town guests.":"Hotelinfo til gæster udefra.","Include accommodation info?":"Skal oplysninger om overnatning med?","Who books the rooms?":"Hvem booker værelserne?","Guests book themselves":"Gæsterne booker selv","We arrange for selected guests":"Vi arrangerer det for udvalgte gæster","Both":"Begge dele","Add another hotel":"Tilføj endnu et hotel","Should guests request rooms via RSVP?":"Skal gæster anmode om værelser via RSVP?","Transportation":"Transport","Shuttle and private car services.":"Shuttle og privat bilservice.","Do you provide a shuttle?":"Er der en shuttle?","Hotel → Venue departure times":"Afgangstider hotel → lokale","e.g. 11.00, 11.20, 11.40":"fx 11.00, 11.20, 11.40","Venue → Hotel departure times":"Afgangstider lokale → hotel","e.g. 10.40, 11.00":"fx 10.40, 11.00","Pickup points (hotel names) and seats per bus":"Afhentningssteder (hotelnavne) og pladser pr. bus","Add shuttle questions to the RSVP?":"Skal shuttle-spørgsmål med i RSVP?","Guests pick a departure time and return trip.":"Gæster vælger afgangstid og returtur.","Do you offer private car on request?":"Kan der bestilles privat bil efter behov?","Service area":"Serviceområde","Who books the car?":"Hvem booker bilen?","We book it for guests":"Vi booker den til gæsterne","Guests request a car and your coordinator arranges it.":"Gæster anmoder om en bil, og din koordinator arrangerer det.","Guests open a direct booking link.":"Gæster åbner et direkte bookinglink.","Minimum notice (hours)":"Mindste varsel (timer)","Coordinator WhatsApp or email":"Koordinatorens WhatsApp eller e-mail","Direct booking link":"Direkte bookinglink","A link guests can tap to book, e.g. a WhatsApp chat link or a booking page.":"Et link, gæster kan trykke på for at booke, fx et WhatsApp-chatlink eller en bookingside.","Who pays?":"Hvem betaler?","Couple":"Brudeparret","Guest":"Gæsten","Shared":"Delt","Photos and design":"Billeder og design","Everything we need to make it look like you.":"Alt, hvad vi skal bruge for at få det til at ligne jer.","Upload your photos":"Upload dine billeder","Cover photo, 4 for the love story, and gallery photos. Up to 12 photos here.":"Forsidebillede, 4 til kærlighedshistorien og galleribilleder. Op til 12 billeder her.","Or paste a Google Drive link":"Eller indsæt et Google Drive-link","Better for many photos or videos. Set access to \"Anyone with the link\". Required if you don't upload photos.":"Bedst til mange billeder eller videoer. Sæt adgang til \"Alle med linket\". Påkrævet, hvis du ikke uploader billeder.","Which photo goes where?":"Hvilket billede skal hvor?","Cover, 4 for the love story, gallery. Note file names or links.":"Forside, 4 til kærlighedshistorien, galleri. Skriv filnavne eller links.","Preferred colors and style":"Foretrukne farver og stil","You can paste a reference link":"Du kan indsætte et referencelink","Website language":"Hjemmesidens sprog","English":"Engelsk","Indonesian":"Indonesisk","Bilingual":"Tosproget","Write the language you want.":"Skriv det sprog, du ønsker.","Which language?":"Hvilket sprog?","e.g. Javanese, Mandarin, Dutch, or a mix like English + Javanese":"fx javanesisk, mandarin, hollandsk eller en blanding som engelsk + javanesisk","Song request":"Sangønske","Title and artist":"Titel og kunstner","Special notes":"Særlige bemærkninger","Desired delivery date":"Ønsket leveringsdato","Agreement":"Accept","Last step. Please confirm before sending.":"Sidste trin. Bekræft venligst, før du sender.","I understand that {rev} rounds of revisions are included and extra revisions are charged.":"Jeg forstår, at {rev} rettelsesrunder er inkluderet, og at ekstra rettelser faktureres.","I agree to the terms and conditions.":"Jeg accepterer vilkårene og betingelserne.","Send order":"Send bestilling","Done":"Færdig","To do":"Mangler","{done} of {total} sections done":"{done} af {total} sektioner færdige","You can add up to {max} files here.":"Du kan tilføje op til {max} filer her.","Total upload size is too big. Use the Drive link for the rest.":"Den samlede størrelse er for stor. Brug Drive-linket til resten.","{name} is over 3 MB.":"{name} er over 3 MB.","{name} could not be read. Please use JPG or PNG.":"{name} kunne ikke læses. Brug JPG eller PNG.","Remove {name}":"Fjern {name}","Please upload a file, or paste a link below.":"Upload en fil, eller indsæt et link nedenfor.","Please upload at least one file.":"Upload mindst én fil.","Please choose at least one option.":"Vælg mindst én mulighed.","Event name":"Navn på begivenheden","Date":"Dato","Time":"Tidspunkt","Venue name":"Lokalets navn","Full address":"Fuld adresse","Google Maps link":"Google Maps-link","Hotel 1":"Hotel 1","Hotel 2":"Hotel 2","Hotel 3":"Hotel 3","Hotel name":"Hotellets navn","Address":"Adresse","Distance to venue":"Afstand til lokalet","Price per night":"Pris pr. nat","Booking link or promo code":"Bookinglink eller rabatkode","Booking cut-off date":"Sidste bookingdato","Hotel contact":"Hotellets kontakt","Sending... keep this page open":"Sender... hold siden åben","Could not send. Check your connection and try again.":"Kunne ikke sende. Tjek din forbindelse og prøv igen.","Thank you, {name}.":"Tak, {name}.","We received your order and will message you on WhatsApp soon. A confirmation is on its way to {email}.":"Vi har modtaget din bestilling og skriver til dig på WhatsApp snart. En bekræftelse er på vej til {email}.","Your order":"Din bestilling","Your order code":"Din bestillingskode","Save this code. You will need it to send us your guest list.":"Gem denne kode. Du skal bruge den, når du sender os din gæsteliste.","Add your guest list":"Tilføj din gæsteliste","Your order code will be in the confirmation email we send you.":"Du finder din bestillingskode i den bekræftelsesmail, vi sender dig.","Payment":"Betaling","Attach your proof of transfer so we can start on your order.":"Vedhæft dit overførselsbevis, så vi kan gå i gang med din bestilling.","Proof of transfer":"Overførselsbevis","A screenshot or PDF of your payment. Up to 3 files, PDFs up to 3 MB each.":"Et skærmbillede eller en PDF af din betaling. Op til 3 filer, PDF'er maks. 3 MB hver."},"ru":{"Language":"Язык","Order Form":"Форма заказа","Thank you for choosing us! Fill in the details below and we'll get started. Fields marked * are required.":"Спасибо, что выбрали нас! Заполните данные ниже, и мы приступим к работе. Поля, отмеченные *, обязательны.","Contact":"Контакты","How can we reach you?":"Как с вами связаться?","Full name":"Полное имя","WhatsApp number":"Номер WhatsApp","Include country code, e.g. +62 812 3456 7890":"С кодом страны, например +62 812 3456 7890","Email":"Эл. почта","Wedding date":"Дата свадьбы","Where did you find us?":"Как вы о нас узнали?","Choose one":"Выберите","Friend":"Друг","Other":"Другое","Package":"Пакет","Pick your template and any add-ons.":"Выберите шаблон и дополнительные опции.","Template name or code":"Название или код шаблона","Add-ons":"Дополнительные опции","Background music":"Фоновая музыка","Photo gallery":"Фотогалерея","Extra language":"Дополнительный язык","Live streaming link":"Ссылка на трансляцию","Rush delivery":"Срочное выполнение","Couple details":"Данные пары","Names exactly as you want them to appear.":"Имена в том виде, в котором они должны отображаться.","Bride's full name":"Полное имя невесты","Bride's short name":"Короткое имя невесты","Groom's full name":"Полное имя жениха","Groom's short name":"Короткое имя жениха","Name order on the invitation":"Порядок имён в приглашении","Bride first":"Сначала невеста","Groom first":"Сначала жених","Monogram initials":"Инициалы для монограммы","e.g. A & C":"напр. A & C","Parents' names (optional)":"Имена родителей (необязательно)","Contact email shown on the website":"Контактный e-mail на сайте","Events and venue":"Мероприятия и место проведения","Choose your events, then fill in the details for each.":"Выберите мероприятия, затем заполните данные по каждому.","Which events will be included?":"Какие мероприятия включить?","Ceremony":"Церемония","Reception":"Приём гостей","Welcome dinner":"Приветственный ужин","Dress code":"Дресс-код","Gift or registry info (optional)":"Информация о подарках или списке пожеланий (необязательно)","Our Love Story":"Наша история любви","The story page on your website.":"Страница с историей на вашем сайте.","Who writes the story?":"Кто напишет историю?","I'll write it":"Напишу сам(а)","Please help me write it":"Помогите мне её написать","Paste your story":"Вставьте вашу историю","How did you meet, when did you get engaged, any special moment?":"Как вы познакомились, когда обручились, были ли особенные моменты?","RSVP setup":"Настройка RSVP","What your guests will be asked when they reply.":"О чём будут спрашивать гостей при ответе.","RSVP deadline":"Крайний срок RSVP","Which events can guests RSVP to?":"На какие мероприятия гости могут ответить?","Choose your events in the Events section first.":"Сначала выберите мероприятия в разделе «Мероприятия».","Choose your events in the previous step first.":"Сначала выберите мероприятия на предыдущем шаге.","Meal service":"Формат питания","Buffet":"Шведский стол","Guests only list dietary requirements.":"Гости указывают только диетические ограничения.","Set menu":"Сет-меню","Each guest picks a main course.":"Каждый гость выбирает основное блюдо.","Set menu options":"Варианты сет-меню","One per line, e.g. Beef, Chicken, Fish, Vegetarian. Each guest chooses their own.":"По одному на строку, например: говядина, курица, рыба, вегетарианское. Каждый гость выбирает сам.","Menu photos (optional)":"Фото меню (необязательно)","A photo of each dish or your menu card. Up to 6 photos.":"Фото каждого блюда или меню. До 6 фото.","Choose files":"Выбрать файлы","Can guests bring additional guests?":"Могут ли гости привести с собой других гостей?","Yes":"Да","No":"Нет","No, the invitation is for the named guest only":"Нет, приглашение только для указанного гостя","Maximum additional guests per invitation":"Максимум дополнительных гостей на приглашение","Not counting the invited guest. e.g. 1 for a plus-one.":"Не считая приглашённого. Например, 1 для пары.","Should guests list the names of additional guests?":"Нужно ли гостям указывать имена дополнительных гостей?","No, a number is enough":"Нет, достаточно числа","Accommodation":"Проживание","Hotel info for out-of-town guests.":"Информация об отелях для иногородних гостей.","Include accommodation info?":"Добавить информацию о проживании?","Who books the rooms?":"Кто бронирует номера?","Guests book themselves":"Гости бронируют сами","We arrange for selected guests":"Мы организуем для выбранных гостей","Both":"И то и другое","Add another hotel":"Добавить ещё один отель","Should guests request rooms via RSVP?":"Должны ли гости запрашивать номера через RSVP?","Transportation":"Транспорт","Shuttle and private car services.":"Трансфер и услуги частного автомобиля.","Do you provide a shuttle?":"Будет ли трансфер?","Hotel → Venue departure times":"Время отправления отель → площадка","e.g. 11.00, 11.20, 11.40":"напр. 11.00, 11.20, 11.40","Venue → Hotel departure times":"Время отправления площадка → отель","e.g. 10.40, 11.00":"напр. 10.40, 11.00","Pickup points (hotel names) and seats per bus":"Пункты посадки (названия отелей) и число мест в автобусе","Add shuttle questions to the RSVP?":"Добавить вопросы о трансфере в RSVP?","Guests pick a departure time and return trip.":"Гости выбирают время отправления и обратный рейс.","Do you offer private car on request?":"Есть ли частный автомобиль по запросу?","Service area":"Зона обслуживания","Who books the car?":"Кто бронирует автомобиль?","We book it for guests":"Мы бронируем для гостей","Guests request a car and your coordinator arranges it.":"Гости запрашивают автомобиль, а ваш координатор организует его.","Guests open a direct booking link.":"Гости открывают прямую ссылку для бронирования.","Minimum notice (hours)":"Минимальный срок заказа (часы)","Coordinator WhatsApp or email":"WhatsApp или e-mail координатора","Direct booking link":"Прямая ссылка для бронирования","A link guests can tap to book, e.g. a WhatsApp chat link or a booking page.":"Ссылка, по которой гости могут забронировать, например ссылка на чат WhatsApp или страницу бронирования.","Who pays?":"Кто оплачивает?","Couple":"Пара","Guest":"Гость","Shared":"Пополам","Photos and design":"Фото и дизайн","Everything we need to make it look like you.":"Всё, что нужно, чтобы сайт был похож на вас.","Upload your photos":"Загрузите ваши фото","Cover photo, 4 for the love story, and gallery photos. Up to 12 photos here.":"Обложка, 4 фото для истории любви и фото для галереи. Здесь до 12 фото.","Or paste a Google Drive link":"Или вставьте ссылку на Google Drive","Better for many photos or videos. Set access to \"Anyone with the link\". Required if you don't upload photos.":"Лучше для большого числа фото или видео. Откройте доступ для «Всех, у кого есть ссылка». Обязательно, если вы не загружаете фото.","Which photo goes where?":"Какое фото куда?","Cover, 4 for the love story, gallery. Note file names or links.":"Обложка, 4 для истории любви, галерея. Укажите названия файлов или ссылки.","Preferred colors and style":"Предпочтительные цвета и стиль","You can paste a reference link":"Можно вставить ссылку-образец","Website language":"Язык сайта","English":"Английский","Indonesian":"Индонезийский","Bilingual":"Двуязычный","Write the language you want.":"Укажите нужный язык.","Which language?":"Какой язык?","e.g. Javanese, Mandarin, Dutch, or a mix like English + Javanese":"например, яванский, китайский, нидерландский или сочетание, скажем, английский + яванский","Song request":"Пожелание по музыке","Title and artist":"Название и исполнитель","Special notes":"Особые пожелания","Desired delivery date":"Желаемая дата готовности","Agreement":"Согласие","Last step. Please confirm before sending.":"Последний шаг. Подтвердите перед отправкой.","I understand that {rev} rounds of revisions are included and extra revisions are charged.":"Я понимаю, что количество включённых кругов правок — {rev}, а дополнительные правки оплачиваются отдельно.","I agree to the terms and conditions.":"Я принимаю условия и положения.","Send order":"Отправить заказ","Done":"Готово","To do":"Осталось","{done} of {total} sections done":"Готово разделов: {done} из {total}","You can add up to {max} files here.":"Здесь можно добавить до {max} файлов.","Total upload size is too big. Use the Drive link for the rest.":"Общий размер файлов слишком велик. Для остальных используйте ссылку на Drive.","{name} is over 3 MB.":"{name} больше 3 МБ.","{name} could not be read. Please use JPG or PNG.":"Не удалось прочитать {name}. Используйте JPG или PNG.","Remove {name}":"Удалить {name}","Please upload a file, or paste a link below.":"Загрузите файл или вставьте ссылку ниже.","Please upload at least one file.":"Загрузите хотя бы один файл.","Please choose at least one option.":"Выберите хотя бы один вариант.","Event name":"Название мероприятия","Date":"Дата","Time":"Время","Venue name":"Название площадки","Full address":"Полный адрес","Google Maps link":"Ссылка на Google Maps","Hotel 1":"Отель 1","Hotel 2":"Отель 2","Hotel 3":"Отель 3","Hotel name":"Название отеля","Address":"Адрес","Distance to venue":"Расстояние до площадки","Price per night":"Цена за ночь","Booking link or promo code":"Ссылка для бронирования или промокод","Booking cut-off date":"Крайний срок бронирования","Hotel contact":"Контакт отеля","Sending... keep this page open":"Отправка... не закрывайте страницу","Could not send. Check your connection and try again.":"Не удалось отправить. Проверьте соединение и попробуйте снова.","Thank you, {name}.":"Спасибо, {name}.","We received your order and will message you on WhatsApp soon. A confirmation is on its way to {email}.":"Мы получили ваш заказ и скоро напишем вам в WhatsApp. Подтверждение отправлено на {email}.","Your order":"Ваш заказ","Your order code":"Ваш код заказа","Save this code. You will need it to send us your guest list.":"Сохраните этот код. Он понадобится, чтобы отправить нам список гостей.","Add your guest list":"Добавить список гостей","Your order code will be in the confirmation email we send you.":"Код заказа будет в письме с подтверждением, которое мы вам отправим.","Payment":"Оплата","Attach your proof of transfer so we can start on your order.":"Прикрепите подтверждение перевода, чтобы мы могли приступить к заказу.","Proof of transfer":"Подтверждение перевода","A screenshot or PDF of your payment. Up to 3 files, PDFs up to 3 MB each.":"Скриншот или PDF платежа. До 3 файлов, PDF не более 3 МБ каждый."},"es":{"Language":"Idioma","Order Form":"Formulario de pedido","Thank you for choosing us! Fill in the details below and we'll get started. Fields marked * are required.":"¡Gracias por elegirnos! Rellena los datos de abajo y nos ponemos manos a la obra. Los campos marcados con * son obligatorios.","Contact":"Contacto","How can we reach you?":"¿Cómo podemos contactarte?","Full name":"Nombre completo","WhatsApp number":"Número de WhatsApp","Include country code, e.g. +62 812 3456 7890":"Incluye el prefijo del país, p. ej. +62 812 3456 7890","Email":"Correo electrónico","Wedding date":"Fecha de la boda","Where did you find us?":"¿Cómo nos encontraste?","Choose one":"Elige una","Friend":"Un amigo","Other":"Otro","Package":"Paquete","Pick your template and any add-ons.":"Elige tu plantilla y los extras que quieras.","Template name or code":"Nombre o código de la plantilla","Add-ons":"Extras","Background music":"Música de fondo","Photo gallery":"Galería de fotos","Extra language":"Idioma adicional","Live streaming link":"Enlace de transmisión en vivo","Rush delivery":"Entrega urgente","Couple details":"Datos de la pareja","Names exactly as you want them to appear.":"Nombres tal como quieres que aparezcan.","Bride's full name":"Nombre completo de la novia","Bride's short name":"Nombre corto de la novia","Groom's full name":"Nombre completo del novio","Groom's short name":"Nombre corto del novio","Name order on the invitation":"Orden de los nombres en la invitación","Bride first":"Primero la novia","Groom first":"Primero el novio","Monogram initials":"Iniciales del monograma","e.g. A & C":"p. ej. A & C","Parents' names (optional)":"Nombres de los padres (opcional)","Contact email shown on the website":"Correo de contacto que se mostrará en la web","Events and venue":"Eventos y lugar","Choose your events, then fill in the details for each.":"Elige tus eventos y rellena los detalles de cada uno.","Which events will be included?":"¿Qué eventos se incluirán?","Ceremony":"Ceremonia","Reception":"Recepción","Welcome dinner":"Cena de bienvenida","Dress code":"Código de vestimenta","Gift or registry info (optional)":"Información sobre regalos o lista de bodas (opcional)","Our Love Story":"Nuestra historia de amor","The story page on your website.":"La página de la historia en tu web.","Who writes the story?":"¿Quién escribe la historia?","I'll write it":"La escribo yo","Please help me write it":"Ayúdame a escribirla","Paste your story":"Pega tu historia","How did you meet, when did you get engaged, any special moment?":"¿Cómo os conocisteis, cuándo os comprometisteis, algún momento especial?","RSVP setup":"Configuración del RSVP","What your guests will be asked when they reply.":"Lo que se preguntará a tus invitados al responder.","RSVP deadline":"Fecha límite del RSVP","Which events can guests RSVP to?":"¿A qué eventos pueden responder los invitados?","Choose your events in the Events section first.":"Primero elige tus eventos en la sección Eventos.","Choose your events in the previous step first.":"Primero elige tus eventos en el paso anterior.","Meal service":"Servicio de comida","Buffet":"Bufé","Guests only list dietary requirements.":"Los invitados solo indican sus requisitos dietéticos.","Set menu":"Menú cerrado","Each guest picks a main course.":"Cada invitado elige un plato principal.","Set menu options":"Opciones del menú cerrado","One per line, e.g. Beef, Chicken, Fish, Vegetarian. Each guest chooses their own.":"Uno por línea, p. ej. ternera, pollo, pescado, vegetariano. Cada invitado elige el suyo.","Menu photos (optional)":"Fotos del menú (opcional)","A photo of each dish or your menu card. Up to 6 photos.":"Una foto de cada plato o de tu carta de menú. Hasta 6 fotos.","Choose files":"Elegir archivos","Can guests bring additional guests?":"¿Pueden los invitados traer acompañantes?","Yes":"Sí","No":"No","No, the invitation is for the named guest only":"No, la invitación es solo para el invitado indicado","Maximum additional guests per invitation":"Máximo de acompañantes por invitación","Not counting the invited guest. e.g. 1 for a plus-one.":"Sin contar al invitado. P. ej. 1 para un acompañante.","Should guests list the names of additional guests?":"¿Deben los invitados indicar los nombres de los acompañantes?","No, a number is enough":"No, basta con un número","Accommodation":"Alojamiento","Hotel info for out-of-town guests.":"Información de hoteles para invitados de fuera.","Include accommodation info?":"¿Incluir información de alojamiento?","Who books the rooms?":"¿Quién reserva las habitaciones?","Guests book themselves":"Los invitados reservan por su cuenta","We arrange for selected guests":"Nos encargamos para algunos invitados","Both":"Ambas","Add another hotel":"Añadir otro hotel","Should guests request rooms via RSVP?":"¿Deben los invitados solicitar habitación a través del RSVP?","Transportation":"Transporte","Shuttle and private car services.":"Servicio de lanzadera y coche privado.","Do you provide a shuttle?":"¿Habrá servicio de lanzadera?","Hotel → Venue departure times":"Horarios de salida hotel → lugar","e.g. 11.00, 11.20, 11.40":"p. ej. 11.00, 11.20, 11.40","Venue → Hotel departure times":"Horarios de salida lugar → hotel","e.g. 10.40, 11.00":"p. ej. 10.40, 11.00","Pickup points (hotel names) and seats per bus":"Puntos de recogida (nombres de hoteles) y plazas por autobús","Add shuttle questions to the RSVP?":"¿Añadir preguntas sobre la lanzadera al RSVP?","Guests pick a departure time and return trip.":"Los invitados eligen hora de salida y de regreso.","Do you offer private car on request?":"¿Hay coche privado bajo petición?","Service area":"Zona de servicio","Who books the car?":"¿Quién reserva el coche?","We book it for guests":"Lo reservamos nosotros para los invitados","Guests request a car and your coordinator arranges it.":"Los invitados solicitan un coche y tu coordinador lo organiza.","Guests open a direct booking link.":"Los invitados abren un enlace de reserva directa.","Minimum notice (hours)":"Antelación mínima (horas)","Coordinator WhatsApp or email":"WhatsApp o correo del coordinador","Direct booking link":"Enlace de reserva directa","A link guests can tap to book, e.g. a WhatsApp chat link or a booking page.":"Un enlace que los invitados pueden pulsar para reservar, p. ej. un enlace de chat de WhatsApp o una página de reservas.","Who pays?":"¿Quién paga?","Couple":"La pareja","Guest":"El invitado","Shared":"Compartido","Photos and design":"Fotos y diseño","Everything we need to make it look like you.":"Todo lo que necesitamos para que refleje tu estilo.","Upload your photos":"Sube tus fotos","Cover photo, 4 for the love story, and gallery photos. Up to 12 photos here.":"Foto de portada, 4 para la historia de amor y fotos para la galería. Hasta 12 fotos aquí.","Or paste a Google Drive link":"O pega un enlace de Google Drive","Better for many photos or videos. Set access to \"Anyone with the link\". Required if you don't upload photos.":"Mejor para muchas fotos o vídeos. Configura el acceso como «Cualquier persona con el enlace». Obligatorio si no subes fotos.","Which photo goes where?":"¿Qué foto va dónde?","Cover, 4 for the love story, gallery. Note file names or links.":"Portada, 4 para la historia de amor, galería. Indica nombres de archivo o enlaces.","Preferred colors and style":"Colores y estilo preferidos","You can paste a reference link":"Puedes pegar un enlace de referencia","Website language":"Idioma de la web","English":"Inglés","Indonesian":"Indonesio","Bilingual":"Bilingüe","Write the language you want.":"Escribe el idioma que quieras.","Which language?":"¿Qué idioma?","e.g. Javanese, Mandarin, Dutch, or a mix like English + Javanese":"p. ej. javanés, mandarín, neerlandés o una mezcla como inglés + javanés","Song request":"Canción solicitada","Title and artist":"Título y artista","Special notes":"Notas especiales","Desired delivery date":"Fecha de entrega deseada","Agreement":"Conformidad","Last step. Please confirm before sending.":"Último paso. Confirma antes de enviar.","I understand that {rev} rounds of revisions are included and extra revisions are charged.":"Entiendo que se incluyen {rev} rondas de revisiones y que las revisiones adicionales se cobran.","I agree to the terms and conditions.":"Acepto los términos y condiciones.","Send order":"Enviar pedido","Done":"Hecho","To do":"Pendiente","{done} of {total} sections done":"{done} de {total} secciones completadas","You can add up to {max} files here.":"Aquí puedes añadir hasta {max} archivos.","Total upload size is too big. Use the Drive link for the rest.":"El tamaño total es demasiado grande. Usa el enlace de Drive para el resto.","{name} is over 3 MB.":"{name} supera los 3 MB.","{name} could not be read. Please use JPG or PNG.":"No se pudo leer {name}. Usa JPG o PNG.","Remove {name}":"Quitar {name}","Please upload a file, or paste a link below.":"Sube un archivo o pega un enlace abajo.","Please upload at least one file.":"Sube al menos un archivo.","Please choose at least one option.":"Elige al menos una opción.","Event name":"Nombre del evento","Date":"Fecha","Time":"Hora","Venue name":"Nombre del lugar","Full address":"Dirección completa","Google Maps link":"Enlace de Google Maps","Hotel 1":"Hotel 1","Hotel 2":"Hotel 2","Hotel 3":"Hotel 3","Hotel name":"Nombre del hotel","Address":"Dirección","Distance to venue":"Distancia al lugar","Price per night":"Precio por noche","Booking link or promo code":"Enlace de reserva o código promocional","Booking cut-off date":"Fecha límite de reserva","Hotel contact":"Contacto del hotel","Sending... keep this page open":"Enviando... mantén esta página abierta","Could not send. Check your connection and try again.":"No se pudo enviar. Comprueba tu conexión e inténtalo de nuevo.","Thank you, {name}.":"Gracias, {name}.","We received your order and will message you on WhatsApp soon. A confirmation is on its way to {email}.":"Hemos recibido tu pedido y te escribiremos pronto por WhatsApp. Te hemos enviado una confirmación a {email}.","Your order":"Tu pedido","Your order code":"Tu código de pedido","Save this code. You will need it to send us your guest list.":"Guarda este código. Lo necesitarás para enviarnos tu lista de invitados.","Add your guest list":"Añadir tu lista de invitados","Your order code will be in the confirmation email we send you.":"Encontrarás tu código de pedido en el correo de confirmación que te enviaremos.","Payment":"Pago","Attach your proof of transfer so we can start on your order.":"Adjunta tu comprobante de transferencia para que podamos empezar con tu pedido.","Proof of transfer":"Comprobante de transferencia","A screenshot or PDF of your payment. Up to 3 files, PDFs up to 3 MB each.":"Una captura o un PDF de tu pago. Hasta 3 archivos, PDF de máximo 3 MB cada uno."}};
+let LANG = 'en';
+const STATIC_VARS = {rev:REVISIONS};
+const TITLE_EN = document.querySelector('.top h1').textContent;
+function T(s, vars){
+  let r = (LANG !== 'en' && I18N[LANG] && I18N[LANG][s]) || s;
+  if (vars) for (const k in vars) r = r.split('{'+k+'}').join(vars[k]);
+  return r;
+}
+function applyLang(root){
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode: n =>
+    (n.parentElement && !n.parentElement.closest('[data-noi18n],script,style') && n.nodeValue.trim())
+      ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT});
+  const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(n=>{
+    if (n.__en === undefined) n.__en = n.nodeValue;
+    const m = n.__en.match(/^(\s*)([\s\S]*?)(\s*)$/);
+    n.nodeValue = m[1] + T(m[2].replace(/\s+/g,' '), STATIC_VARS) + m[3];
+  });
+  const els = [...root.querySelectorAll('[placeholder],[aria-label],[title]')];
+  if (root.matches && root.matches('[placeholder],[aria-label],[title]')) els.push(root);
+  els.forEach(el=>{
+    if (el.closest('[data-noi18n]')) return;
+    ['placeholder','aria-label','title'].forEach(a=>{
+      if (!el.hasAttribute(a)) return;
+      const k = 'data-en-' + a;
+      if (!el.hasAttribute(k)) el.setAttribute(k, el.getAttribute(a));
+      el.setAttribute(a, T(el.getAttribute(k), STATIC_VARS));
+    });
+  });
+}
+function setLang(l, save){
+  if (!LANGS[l]) l = 'en';
+  LANG = l;
+  document.documentElement.lang = l;
+  document.title = T(TITLE_EN);
+  const sel = document.getElementById('lang');
+  if (sel){ sel.value = l; sel.setAttribute('aria-label', T('Language')); }
+  applyLang(document.body);
+  if (save){ try{ localStorage.setItem('wwf_lang', l); }catch(e){} }
+  if (typeof afterLang === 'function') afterLang();
+}
+function initLang(){
+  // options without a value keep their English text as the submitted value
+  document.querySelectorAll('option:not([value])').forEach(o => o.value = o.textContent);
+  const sel = document.getElementById('lang');
+  sel.innerHTML = Object.entries(LANGS).map(([k,v]) => `<option value="${k}">${v}</option>`).join('');
+  sel.addEventListener('change', () => setLang(sel.value, true));
+  let l = new URLSearchParams(location.search).get('lang');
+  try{ l = l || localStorage.getItem('wwf_lang'); }catch(e){}
+  if (!l) l = (navigator.language || 'en').slice(0,2).toLowerCase();
+  setLang(l);
+}
+function afterLang(){ document.querySelectorAll('.upload').forEach(renderFiles); update(); }
+
+let reservedCode = '';
+// Asks the script for the next order number (JSONP, so no CORS needed). Empty string if it can't be reached.
+function reserveCode(){
+  if (reservedCode) return Promise.resolve(reservedCode);
+  if (SCRIPT_URL.includes('PASTE_')) return Promise.resolve(reservedCode = 'WD-0001');
+  return new Promise(res => {
+    const cb = 'rc_' + Date.now(), s = document.createElement('script');
+    const done = v => { clearTimeout(t); delete window[cb]; s.remove(); if (v) reservedCode = v; res(v || ''); };
+    const t = setTimeout(() => done(''), 8000);
+    window[cb] = d => done(d && d.ok ? String(d.code) : '');
+    s.onerror = () => done('');
+    s.src = SCRIPT_URL + '?action=reserve&callback=' + cb;
+    document.head.append(s);
+  });
+}
+
+const form  = document.getElementById('f');
+const steps = [...document.querySelectorAll('.step')];
+const $ = s => document.querySelector(s);
+
+
+const active = () => steps;
+
+function refresh(){
+  document.querySelectorAll('[data-when]').forEach(el=>{
+    const [n,v] = el.dataset.when.split('=');
+    el.hidden = !form.querySelector(`[name="${n}"][value="${v}"]:checked`);
+  });
+  form.querySelectorAll('input,select,textarea').forEach(i => i.disabled = !!i.closest('[hidden],[data-off]'));
+}
+
+function isComplete(step){
+  if ([...step.querySelectorAll('.upload')].some(uploadMissing)) return false;
+  for (const g of step.querySelectorAll('[data-need]')){
+    if (!g.closest('[hidden]') && !g.querySelector('input:checked')) return false;
+  }
+  for (const i of step.querySelectorAll('input,select,textarea')){
+    if (!i.disabled && !i.checkValidity()) return false;
+  }
+  return true;
+}
+
+function update(){
+  refresh();
+  const a = active();
+  let done = 0;
+  a.forEach(s => {
+    const ok = isComplete(s);
+    s.classList.toggle('done', ok);
+    s.querySelector('.st').textContent = T(ok ? 'Done' : 'To do');
+    if (ok) done++;
+  });
+  $('#barFill').style.width = (done/a.length*100)+'%';
+  $('#stepLabel').textContent = T('{done} of {total} sections done',{done,total:a.length});
+}
+
+function validate(step){
+  document.querySelectorAll('.msg').forEach(m => m.remove());
+  document.querySelectorAll('.bad').forEach(m => m.classList.remove('bad'));
+  for (const box of step.querySelectorAll('.upload')){
+    if (uploadMissing(box)){
+      const m = box.querySelector('.uerr');
+      m.textContent = box.dataset.or ? T('Please upload a file, or paste a link below.') : T('Please upload at least one file.');
+      box.scrollIntoView({block:'center',behavior:'smooth'});
+      return false;
+    }
+  }
+  for (const g of step.querySelectorAll('[data-need]')){
+    if (g.closest('[hidden]')) continue;
+    if (!g.querySelector('input:checked')){
+      g.classList.add('bad');
+      g.insertAdjacentHTML('beforeend',`<p class="msg">${T('Please choose at least one option.')}</p>`);
+      g.scrollIntoView({block:'center',behavior:'smooth'});
+      return false;
+    }
+  }
+  for (const i of step.querySelectorAll('input,select,textarea')){
+    if (!i.disabled && !i.checkValidity()){ i.reportValidity(); return false; }
+  }
+  return true;
+}
+
+/* Build each section: numbered heading + body (all sections stay open) */
+function buildSections(){
+  steps.forEach((s, idx) => {
+    const h2 = s.querySelector('h2');
+    const title = h2.textContent;
+    h2.remove();
+    const body = document.createElement('div');
+    body.className = 'body';
+    [...s.childNodes].forEach(n => body.append(n));
+    const h = document.createElement('h2');
+    h.className = 'acc-h';
+    h.innerHTML = `<span class="num">${idx+1}</span><span class="t">${title}</span><span class="st" data-noi18n>${T('To do')}</span>`;
+    s.append(h, body);
+  });
+}
+
+/* ---- file uploads (compressed in the browser, saved to Drive by the script) ---- */
+const uploads = {};
+const MAX_TOTAL = 9e6;            // total base64 characters across all files
+const totalSize = () => Object.values(uploads).flat().reduce((n,f)=>n+f.data.length,0);
+
+function readDataUrl(file){
+  return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); });
+}
+async function prepare(file){
+  if (!file.type.startsWith('image/')){
+    if (file.size > 3e6) throw new Error(T('{name} is over 3 MB.',{name:file.name}));
+    return {name:file.name, type:file.type, data:(await readDataUrl(file)).split(',')[1], url:''};
+  }
+  let bmp;
+  try{ bmp = await createImageBitmap(file); }
+  catch(e){ throw new Error(T('{name} could not be read. Please use JPG or PNG.',{name:file.name})); }
+  const k = Math.min(1, 1600/Math.max(bmp.width,bmp.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(bmp.width*k); c.height = Math.round(bmp.height*k);
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,c.width,c.height);
+  ctx.drawImage(bmp,0,0,c.width,c.height);
+  const url = c.toDataURL('image/jpeg',0.82);
+  return {name:file.name.replace(/\.[^.]+$/,'')+'.jpg', type:'image/jpeg', data:url.split(',')[1], url};
+}
+function renderFiles(box){
+  const key = box.dataset.up;
+  box.querySelector('.files').innerHTML = uploads[key].map((f,i)=>
+    `<li>${f.url?`<img src="${f.url}" alt="">`:''}<span class="n">${f.name.replace(/[<>&"]/g,'')}</span><span class="sz">${Math.round(f.data.length*.75/1024)} KB</span><button type="button" data-rm="${i}" aria-label="${T('Remove {name}',{name:f.name.replace(/[<>&"]/g,'')})}">&times;</button></li>`).join('');
+}
+document.querySelectorAll('.upload').forEach(box=>{
+  const key = box.dataset.up, max = +box.dataset.max, err = box.querySelector('.uerr');
+  uploads[key] = [];
+  box.querySelector('input[type=file]').addEventListener('change', async e=>{
+    err.textContent = '';
+    for (const file of [...e.target.files]){
+      if (uploads[key].length >= max){ err.textContent = T('You can add up to {max} files here.',{max}); break; }
+      try{
+        const f = await prepare(file);
+        if (totalSize()+f.data.length > MAX_TOTAL){ err.textContent = T('Total upload size is too big. Use the Drive link for the rest.'); break; }
+        uploads[key].push(f);
+      }catch(ex){ err.textContent = ex.message; }
+    }
+    e.target.value = '';
+    renderFiles(box); update();
+  });
+  box.addEventListener('click', e=>{
+    const rm = e.target.closest('[data-rm]');
+    if (!rm) return;
+    uploads[key].splice(+rm.dataset.rm,1); err.textContent = '';
+    renderFiles(box); update();
+  });
+});
+function uploadMissing(box){
+  if (!box.hasAttribute('data-need-files') || box.closest('[hidden],[data-off]')) return false;
+  if (uploads[box.dataset.up].length) return false;
+  const alt = box.dataset.or && form.elements[box.dataset.or];
+  return !(alt && alt.value.trim());
+}
+
+/* ---- dynamic events ---- */
+function field(label, type, req, extra=''){
+  const tag = type==='textarea' ? `<textarea data-label="${label}" ${req?'required':''}></textarea>`
+            : `<input type="${type}" data-label="${label}" ${req?'required':''} ${extra}>`;
+  return `<div class="f"><label class="${req?'req':''}">${label}</label>${tag}</div>`;
+}
+function eventBlock(ev){
+  const d = document.createElement('div');
+  d.className = 'block'; d.dataset.ev = ev;
+  d.innerHTML = `<h3>${ev}</h3>` +
+    (ev==='Other' ? field('Event name','text',true) : '') +
+    `<div class="row">${field('Date','date',true)}${field('Time','time',true)}</div>` +
+    field('Venue name','text',true) + field('Full address','text',true) +
+    field('Google Maps link','url',false,'placeholder="https://maps.google.com/..."');
+  return d;
+}
+function syncEvents(){
+  const chosen = [...form.querySelectorAll('[name=events]:checked')].map(i=>i.value);
+  const box = $('#eventBlocks');
+  [...box.children].forEach(b => { if(!chosen.includes(b.dataset.ev)) b.remove(); });
+  chosen.forEach(ev => {
+    let b = [...box.children].find(x => x.dataset.ev === ev);
+    if (!b) b = eventBlock(ev);
+    box.append(b);
+  });
+  const rb = $('#rsvpEvents');
+  const prev = new Set([...rb.querySelectorAll('input:checked')].map(i=>i.value));
+  rb.innerHTML = chosen.length ? chosen.map(ev =>
+    `<label class="opt"><input type="checkbox" name="rsvp_events" value="${ev}" ${prev.has(ev)||!prev.size?'checked':''}><span>${ev}</span></label>`).join('')
+    : '<p class="hint">Choose your events in the previous step first.</p>';
+  applyLang($('#eventBlocks')); applyLang(rb);
+  update();
+}
+
+/* ---- dynamic hotels ---- */
+function hotelBlock(n){
+  const d = document.createElement('div');
+  d.className = 'block'; d.dataset.title = 'Hotel ' + n;
+  d.innerHTML = `<h3>Hotel ${n}</h3>` +
+    field('Hotel name','text',true) + field('Address','text',false) +
+    field('Google Maps link','url',false) +
+    `<div class="row">${field('Distance to venue','text',false)}${field('Price per night','text',false)}</div>` +
+    field('Booking link or promo code','text',false) +
+    `<div class="row">${field('Booking cut-off date','date',false)}${field('Hotel contact','text',false)}</div>`;
+  return d;
+}
+function addHotel(){
+  const box = $('#hotelBlocks');
+  if (box.children.length >= 3) return;
+  box.append(hotelBlock(box.children.length+1)); applyLang(box);
+  $('#addHotel').hidden = box.children.length >= 3;
+  refresh();
+}
+addHotel();
+$('#addHotel').onclick = () => { addHotel(); update(); };
+
+function compile(box){
+  return [...box.children].map(b => {
+    const title = b.dataset.ev || b.dataset.title;
+    const lines = [...b.querySelectorAll('[data-label]')].map(i => `${i.dataset.label}: ${i.value || '-'}`);
+    return `${title}\n${lines.join('\n')}`;
+  }).join('\n\n');
+}
+
+/* ---- events and submit ---- */
+form.addEventListener('change', e => {
+  if (e.target.name === 'events') syncEvents();
+  update();
+});
+form.addEventListener('input', update);
+
+$('#next').onclick = async () => {
+  const bad = active().find(s => !isComplete(s));
+  if (bad){
+    validate(bad);
+    return;
+  }
+  await submit();
+};
+
+async function submit(){
+  const btn = $('#next'); btn.disabled = true; btn.textContent = T('Sending... keep this page open');
+  const fd = new FormData(form);
+  fd.set('ui_language', LANG);
+  const orderCode = await reserveCode(); if (orderCode) fd.set('order_code', orderCode);
+  fd.set('events_detail', compile($('#eventBlocks')));
+  if (form.querySelector('[name=accom][value=Yes]:checked')) fd.set('hotels_detail', compile($('#hotelBlocks')));
+  const payload = {};
+  for (const k of new Set(fd.keys())){ const v = fd.getAll(k); payload[k] = v.length > 1 ? v : v[0]; }
+  payload.files = [...document.querySelectorAll('.upload')]
+    .filter(b => !b.closest('[hidden],[data-off]'))
+    .flatMap(b => uploads[b.dataset.up].map(f => ({field:b.dataset.up, name:f.name, type:f.type, data:f.data})));
+  const body = JSON.stringify(payload);
+  const demo = SCRIPT_URL.includes('PASTE_');
+  try{
+    if (!demo) await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body});
+  }catch(err){
+    btn.disabled = false; btn.textContent = T('Send order');
+    $('#stepLabel').textContent = T('Could not send. Check your connection and try again.');
+    return;
+  }
+  const name = fd.get('full_name'), email = fd.get('email');
+  $('#card').innerHTML = `<div class="thanks"><h2>${T('Thank you, {name}.',{name:String(name).replace(/[<>&]/g,'')})}</h2>
+    <p>${T('We received your order and will message you on WhatsApp soon. A confirmation is on its way to {email}.',{email:String(email).replace(/[<>&]/g,'')})}</p>
+    ${orderCode ? `<div class="code"><span class="code-l">${T('Your order code')}</span><b>${orderCode}</b><span class="code-h">${T('Save this code. You will need it to send us your guest list.')}</span></div>` : `<p class="hint">${T('Your order code will be in the confirmation email we send you.')}</p>`}
+    <a class="btn-link" href="${GUEST_FORM_URL}?${orderCode ? 'code=' + orderCode + '&' : ''}lang=${LANG}">${T('Add your guest list')}</a>
+    ${demo ? '<div class="demo"><b>Demo mode.</b> SCRIPT_URL is not set yet, so nothing was saved. Paste your Apps Script URL at the top of the script section.</div>' : ''}</div>`;
+  $('.progress').hidden = true;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.querySelectorAll('label.req .hint').forEach(h=>{
+  h.parentElement.classList.remove('req');
+  h.insertAdjacentHTML('beforebegin','<span class="star"></span>');
+});
+buildSections();
+initLang();
+update();
+</script>
+</body>
+</html>
